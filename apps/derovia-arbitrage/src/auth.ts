@@ -87,11 +87,25 @@ export async function compteActuel(): Promise<Compte | null> {
   return compteDepuis(data.session);
 }
 
-/** Cree un compte. */
-export async function inscrire(email: string, motDePasse: string): Promise<ResultatAuth> {
+/**
+ * Cree un compte.
+ *
+ * `nom` accompagne l'inscription dans les metadonnees du compte : c'est lui que
+ * le declencheur Supabase reprend pour remplir le profil. Sans cela, le champ
+ * « Nom » du formulaire serait saisi puis perdu.
+ */
+export async function inscrire(
+  email: string,
+  motDePasse: string,
+  nom?: string,
+): Promise<ResultatAuth> {
   if (!client) return { etat: "erreur", message: "L'authentification n'est pas configurée." };
 
-  const { data, error } = await client.auth.signUp({ email, password: motDePasse });
+  const { data, error } = await client.auth.signUp({
+    email,
+    password: motDePasse,
+    ...(nom?.trim() ? { options: { data: { nom: nom.trim() } } } : {}),
+  });
   if (error) return { etat: "erreur", message: messageLisible(error.message) };
 
   const compte = compteDepuis(data.session);

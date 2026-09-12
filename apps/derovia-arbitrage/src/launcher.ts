@@ -195,9 +195,14 @@ async function soumettreFormulaire(): Promise<void> {
   submit.textContent = mode === "signup" ? "Création…" : "Connexion…";
   effacerMessage();
 
-  const resultat = mode === "signup"
-    ? await inscrire(email, motDePasse)
-    : await connecter(email, motDePasse);
+  const nom = document
+    .querySelector<HTMLInputElement>('#auth-name-field input')
+    ?.value.trim();
+
+  const resultat =
+    mode === "signup"
+      ? await inscrire(email, motDePasse, nom)
+      : await connecter(email, motDePasse);
 
   submit.disabled = false;
   submit.textContent = libelle;
