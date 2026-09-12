@@ -91,28 +91,46 @@ fn convertir_document(
     derovia_convert::convert_document(&file_name, &input_bytes, target_format, &options)
 }
 
-/// Indique si le moteur Pandoc est installe, et ce qu'il en couterait.
+/// L'etat de chacun des moteurs externes, et ce qu'ils couteraient.
 #[tauri::command]
-fn moteur_statut(app: tauri::AppHandle) -> Result<derovia_engines::EngineStatus, CoreError> {
-    Ok(derovia_engines::pandoc_status(&dossier_donnees(&app)?))
+fn moteurs_statut(app: tauri::AppHandle) -> Result<Vec<derovia_engines::EngineStatus>, CoreError> {
+    Ok(derovia_engines::all_statuses(&dossier_donnees(&app)?))
 }
 
-/// Telecharge et installe Pandoc, en publiant l'avancement.
+/// L'avancement du telechargement d'un moteur.
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct Progression {
+    /// L'identifiant du moteur concerne.
+    id: String,
+    /// Les octets deja recus.
+    recus: u64,
+    /// Les octets attendus.
+    attendus: u64,
+}
+
+/// Telecharge et installe un moteur, en publiant l'avancement.
 ///
-/// Le travail est lourd — quarante megaoctets a recevoir puis a extraire — et
-/// tourne donc hors du fil principal : sinon la fenetre resterait figee pendant
-/// toute la duree.
+/// Le travail est lourd — des dizaines de megaoctets a recevoir puis a
+/// deplier — et tourne donc hors du fil principal : sinon la fenetre resterait
+/// figee pendant toute la duree.
 #[tauri::command]
 async fn installer_moteur(
     app: tauri::AppHandle,
+    id: String,
 ) -> Result<derovia_engines::EngineStatus, CoreError> {
     let base = dossier_donnees(&app)?;
+    let spec = derovia_engines::find(&id)
+        .ok_or_else(|| CoreError::failure("moteur", format!("Moteur inconnu : {id}")))?;
     let rapporteur = app.clone();
 
     tauri::async_runtime::spawn_blocking(move || {
-        derovia_engines::install_pandoc(&base, |recus, attendus| {
+        derovia_engines::install(&base, spec, |recus, attendus| {
             use tauri::Emitter as _;
-            let _ = rapporteur.emit("moteur://progression", (recus, attendus));
+            let _ = rapporteur.emit(
+                "moteur://progression",
+                Progression { id: spec.id.to_owned(), recus, attendus },
+            );
         })
     })
     .await
@@ -292,7 +310,7 @@ fn main() {
             catalogue,
             analyser,
             convertir_document,
-            moteur_statut,
+            moteurs_statut,
             installer_moteur,
             compresser_fichier,
             sauvegarder_fichier,

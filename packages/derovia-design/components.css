@@ -1279,3 +1279,37 @@
   color: var(--ink);
   font-weight: var(--weight-medium);
 }
+
+/* --- Ecran de preparation -------------------------------------------------
+   Le premier lancement, quand les moteurs externes doivent etre recuperes. */
+
+.setup__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.setup__global {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+  margin-top: var(--space-6);
+}
+
+.setup__actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+.setup__note {
+  max-width: 58ch;
+  margin: var(--space-4) auto 0;
+  color: var(--ink-tertiary);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  text-align: center;
+}

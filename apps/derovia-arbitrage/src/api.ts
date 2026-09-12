@@ -21,6 +21,7 @@ import type {
   ConvertOptions,
   EngineError,
   EngineStatus,
+  ProgressionMoteur,
   FichierSauvegarde,
   PresetCard,
 } from "./types";
@@ -172,30 +173,29 @@ export async function lireFichier(file: File): Promise<number[]> {
   return Array.from(new Uint8Array(await file.arrayBuffer()));
 }
 
-/** L'etat du moteur Pandoc. */
-export async function moteurStatut(): Promise<EngineStatus> {
+/** L'etat de chacun des moteurs externes. */
+export async function moteursStatut(): Promise<EngineStatus[]> {
   if (!inTauri()) throw moteurIndisponible("moteur");
-  return invoke<EngineStatus>("moteur_statut");
+  return invoke<EngineStatus[]>("moteurs_statut");
 }
 
-/** Telecharge et installe Pandoc. */
-export async function installerMoteur(): Promise<EngineStatus> {
+/** Telecharge et installe un moteur. */
+export async function installerMoteur(id: string): Promise<EngineStatus> {
   if (!inTauri()) throw moteurIndisponible("moteur");
-  return invoke<EngineStatus>("installer_moteur");
+  return invoke<EngineStatus>("installer_moteur", { id });
 }
 
 /**
- * Suit l'avancement du telechargement du moteur.
+ * Suit l'avancement des telechargements de moteurs.
  *
  * Renvoie la fonction a appeler pour cesser d'ecouter.
  */
 export async function suivreInstallation(
-  onProgress: (recus: number, attendus: number) => void,
+  onProgress: (progression: ProgressionMoteur) => void,
 ): Promise<() => void> {
   if (!inTauri()) return () => {};
   const { listen } = await import("@tauri-apps/api/event");
-  return listen<[number, number]>("moteur://progression", (evenement) => {
-    const [recus, attendus] = evenement.payload;
-    onProgress(recus, attendus);
+  return listen<ProgressionMoteur>("moteur://progression", (evenement) => {
+    onProgress(evenement.payload);
   });
 }

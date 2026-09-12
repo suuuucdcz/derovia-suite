@@ -9,7 +9,7 @@
 import {
   convertirDocument,
   installerMoteur,
-  moteurStatut,
+  moteursStatut,
   suivreInstallation,
 } from "./api";
 import { escapeHtml } from "./dom";
@@ -109,7 +109,7 @@ function carteMoteur(): string {
 /** Interroge le moteur et rafraichit l'ecran quand la reponse arrive. */
 async function rafraichirMoteur(): Promise<void> {
   try {
-    moteur = await moteurStatut();
+    moteur = (await moteursStatut()).find((candidat) => candidat.id === "pandoc") ?? null;
   } catch {
     // Hors de la fenetre Tauri, la carte reste simplement absente.
     moteur = null;
@@ -127,7 +127,7 @@ async function lancerInstallation(redessiner: () => void): Promise<void> {
   installation = true;
   redessiner();
 
-  const cesser = await suivreInstallation((recus, attendus) => {
+  const cesser = await suivreInstallation(({ recus, attendus }) => {
     const fraction = attendus > 0 ? Math.min(recus / attendus, 1) : 0;
     document
       .querySelector<HTMLElement>("#moteur-barre")
@@ -137,9 +137,9 @@ async function lancerInstallation(redessiner: () => void): Promise<void> {
   });
 
   try {
-    moteur = await installerMoteur();
+    moteur = await installerMoteur("pandoc");
   } catch (erreur: unknown) {
-    moteur = await moteurStatut().catch(() => null);
+    moteur = (await moteursStatut().catch(() => [])).find((c) => c.id === "pandoc") ?? null;
     const message = erreur instanceof Error ? erreur.message : String(erreur);
     console.error("[Derovia] installation du moteur impossible :", message);
   } finally {

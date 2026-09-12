@@ -163,10 +163,21 @@ export interface FichierSauvegarde {
 
 /** L'etat d'installation d'un moteur de conversion externe. */
 export interface EngineStatus {
+  /** L'identifiant court du moteur. */
+  id: string;
+  /** Son nom lisible. */
+  label: string;
   installed: boolean;
   version: string | null;
   /** Poids du telechargement, en octets. */
   downloadBytes: number;
   /** Poids sur le disque une fois installe, en octets. */
   installedBytes: number;
+}
+
+/** L'avancement du telechargement d'un moteur. */
+export interface ProgressionMoteur {
+  id: string;
+  recus: number;
+  attendus: number;
 }

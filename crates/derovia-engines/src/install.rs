@@ -69,6 +69,24 @@ pub const PANDOC: EngineSpec = EngineSpec {
     archive: ArchiveKind::Zip,
 };
 
+/// Tous les moteurs que la suite sait installer.
+///
+/// L'ecran de preparation du premier lancement parcourt cette liste : ajouter
+/// un moteur a la suite, c'est ajouter une entree ici, rien d'autre.
+pub const ENGINES: &[EngineSpec] = &[PANDOC];
+
+/// Retrouve un moteur par son identifiant.
+#[must_use]
+pub fn find(id: &str) -> Option<&'static EngineSpec> {
+    ENGINES.iter().find(|spec| spec.id == id)
+}
+
+/// L'etat de chacun des moteurs connus.
+#[must_use]
+pub fn all_statuses(base: &Path) -> Vec<EngineStatus> {
+    ENGINES.iter().map(|spec| status(base, spec)).collect()
+}
+
 /// L'etat d'installation d'un moteur externe.
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
