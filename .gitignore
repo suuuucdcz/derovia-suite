@@ -20,9 +20,18 @@ apps/*/src-tauri/gen
 # Documentation API generee (lourde, regenerable via scripts/docs.ps1 -Regenerer)
 /target/doc
 
+# Les fichiers prepares pour une publication : ils sortent de la compilation,
+# ils n'ont rien a faire dans l'historique.
+/dist-release
+
 # OS / editeurs
 Thumbs.db
 Desktop.ini
 .DS_Store
 *.swp
 .idea/
+
+# Cle privee de signature des mises a jour. NE JAMAIS COMMITER.
+# La perdre rend toute mise a jour future impossible pour les installations
+# existantes : il faut la sauvegarder ailleurs, hors du depot.
+/.secrets/

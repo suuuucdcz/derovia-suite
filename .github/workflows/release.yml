@@ -1,0 +1,111 @@
+# Publication d'une version de Derovia.
+#
+# Se declenche sur une etiquette « v… » : `git tag v0.3.0 && git push --tags`
+# suffit a produire l'installeur, le signer, creer la release et la publier.
+#
+# La compilation a lieu sur une machine neuve a chaque fois. C'est ce qui
+# garantit que la version publiee ne depend d'aucun reglage present par hasard
+# sur un poste — et que n'importe qui peut reprendre le projet sans devoir
+# reconstituer un environnement.
+name: Publication
+
+on:
+  push:
+    tags:
+      - "v*"
+  # Permet aussi de relancer la publication a la main depuis l'onglet Actions.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Etiquette a publier, par exemple v0.2.0"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # La chaine Rust est epinglee par rust-toolchain.toml ; cette etape ne
+      # fait que s'assurer que la cible MSVC est presente sur la machine.
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      # Sans cache, chaque publication recompilerait l'ensemble des
+      # dependances : une vingtaine de minutes pour rien.
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: ". -> target"
+
+      - run: npm ci
+
+      # Le filet de securite : une version qui ne passe pas ses tests ne doit
+      # pas etre publiee, et surtout pas poussee automatiquement a ceux qui
+      # l'ont deja installee.
+      - name: Verifications
+        run: |
+          cargo fmt --all -- --check
+          cargo clippy --workspace --all-targets -- -D warnings
+          cargo test --workspace
+          npm run check
+
+      - name: Etiquette a publier
+        id: etiquette
+        shell: bash
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            echo "tag=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: tauri-apps/tauri-action@v0
+        id: tauri
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Sans ces deux secrets, l'installeur sort sans signature : les
+          # mises a jour seraient alors refusees par les applications deja
+          # installees, sans aucun message d'erreur cote serveur.
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          projectPath: apps/derovia-arbitrage
+          tagName: ${{ steps.etiquette.outputs.tag }}
+          releaseName: Derovia ${{ steps.etiquette.outputs.tag }}
+          releaseDraft: false
+          prerelease: false
+          includeUpdaterJson: true
+
+      # Une release sans signature passerait inapercue jusqu'au jour ou
+      # quelqu'un cliquerait « Installer » et se heurterait a un refus. On le
+      # verifie avant d'annoncer le telechargement.
+      - name: La mise a jour est bien signee
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! ls target/release/bundle/nsis/*-setup.exe.sig >/dev/null 2>&1; then
+            echo "Aucune signature produite : la mise a jour serait refusee."
+            exit 1
+          fi
+
+      # Le site pointe vers un nom de fichier qui ne change jamais. Sans cette
+      # copie, chaque nouvelle version casserait le bouton de telechargement.
+      - name: Nom de telechargement stable
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          installeur=$(ls target/release/bundle/nsis/*-setup.exe | head -1)
+          cp "$installeur" Derovia-setup.exe
+          gh release upload "${{ steps.etiquette.outputs.tag }}" Derovia-setup.exe --repo "${{ github.repository }}" --clobber

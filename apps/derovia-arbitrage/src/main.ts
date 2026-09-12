@@ -8,6 +8,7 @@
 import "./styles.css";
 
 import { mountLauncher } from "./launcher";
+import { surveillerMiseAJour } from "./maj";
 import { preparer } from "./setup";
 import type { SuiteTool } from "./suite";
 import { startWorkspace as startArbitrage } from "./workspace";
@@ -39,3 +40,7 @@ if (ecranPreparation) {
 } else {
   entrerDansLaSuite();
 }
+
+// La verification part apres l'affichage : elle ne doit jamais retarder
+// l'ouverture de la fenetre, ni l'empecher si le reseau est coupe.
+window.setTimeout(() => void surveillerMiseAJour(), 3000);

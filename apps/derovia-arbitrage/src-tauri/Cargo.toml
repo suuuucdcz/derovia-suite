@@ -20,6 +20,8 @@ derovia-engines = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 tauri = { version = "2", features = [] }
+tauri-plugin-updater = "2.11.0"
+tauri-plugin-process = "2.3.1"
 
 [lints]
 workspace = true

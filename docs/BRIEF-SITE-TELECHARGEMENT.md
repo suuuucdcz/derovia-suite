@@ -22,9 +22,10 @@ modifier lors d'une mise à jour.
 ## Informations à afficher près du bouton
 
 - **Windows 10 ou 11, 64 bits**
-- **Installeur de 2,6 Mo**
-- Version actuelle : **0.1.0**
+- **Installeur de 2,9 Mo**
+- Version actuelle : **0.2.0**
 - Gratuit
+- Se met à jour tout seul
 
 ## ⚠️ Le point le plus important : l'avertissement Windows
 
@@ -50,6 +51,16 @@ et un visiteur qui ferme l'onglet.
 Ne pas minimiser ni cacher cette information : un utilisateur surpris par un
 avertissement de sécurité non annoncé fait davantage demi-tour qu'un utilisateur
 prévenu.
+
+## Les mises à jour
+
+À partir de la version 0.2.0, Derovia vérifie au démarrage s'il existe une
+version plus récente et propose de l'installer. L'utilisateur garde la main : la
+notification est discrète et se reporte d'un clic.
+
+Cela veut dire que **le lien de téléchargement n'a jamais besoin d'être mis à
+jour sur le site**, et qu'il n'y a pas de page « historique des versions » à
+tenir.
 
 ## Ce que fait le logiciel
 

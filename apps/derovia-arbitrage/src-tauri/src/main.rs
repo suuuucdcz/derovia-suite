@@ -341,6 +341,10 @@ fn ouvrir_dans_explorateur(chemin: String) -> Result<(), CoreError> {
 )]
 fn main() {
     tauri::Builder::default()
+        // Les mises a jour : sans elles, une installation reste figee sur la
+        // version telechargee, indefiniment.
+        .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_process::init())
         .invoke_handler(tauri::generate_handler![
             catalogue,
             analyser,

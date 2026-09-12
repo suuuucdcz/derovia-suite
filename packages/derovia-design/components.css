@@ -1384,3 +1384,66 @@
   font-size: var(--text-sm);
   text-align: center;
 }
+
+/* --- Notification de mise a jour ------------------------------------------
+   Flottante, en bas a droite, au-dessus de tout le reste. Discrete : une mise
+   a jour proposee ne doit pas interrompre ce qu'on est en train de faire. */
+
+.maj-toast {
+  position: fixed;
+  right: var(--space-6);
+  bottom: var(--space-6);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  max-width: 420px;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+  animation: maj-entree var(--duration) var(--ease-out) both;
+}
+
+@keyframes maj-entree {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.maj-toast__texte {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.maj-toast__titre {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.maj-toast__note {
+  color: var(--ink-tertiary);
+  font-size: var(--text-xs);
+}
+
+.maj-toast__note[data-tone="negative"] {
+  color: var(--negative);
+}
+
+.maj-toast__actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.maj-toast .progress {
+  margin-top: var(--space-1);
+}
