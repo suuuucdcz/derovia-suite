@@ -415,5 +415,25 @@
       "subtitle": "Investir dans l'outil ou le prendre en leasing",
       "title": "Matériel pro"
     }
+  ],
+  "moteurs": [
+    {
+      "id": "pandoc",
+      "label": "Pandoc",
+      "installed": false,
+      "version": null,
+      "downloadBytes": 41761100,
+      "installedBytes": 234000000,
+      "optional": false
+    },
+    {
+      "id": "libreoffice",
+      "label": "Moteur haute fidélité",
+      "installed": false,
+      "version": null,
+      "downloadBytes": 373252096,
+      "installedBytes": 1596000000,
+      "optional": true
+    }
   ]
 }

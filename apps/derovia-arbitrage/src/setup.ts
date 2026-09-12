@@ -201,66 +201,70 @@ function render(racine: HTMLElement, onTermine: () => void): void {
   racine.innerHTML = `
     <div class="launcher__topbar"></div>
     <div class="launcher__body">
-      <div class="launcher__hero">
-        <div class="launcher__mark" aria-hidden="true">D</div>
-        <h1 class="launcher__wordmark">Préparation</h1>
-        <p class="launcher__tagline">
+      <div class="setup">
+        <div class="setup__hero">
+          <div class="launcher__mark" aria-hidden="true">D</div>
+          <h1 class="setup__titre">Préparation</h1>
+          <p class="setup__lede">
+            ${
+              tousPrets
+                ? "Tout est prêt. Derovia dispose de ses moteurs de conversion."
+                : `Derovia utilise des moteurs externes pour préserver tableaux, notes
+                   et styles. ${escapeHtml(formatBytes(totalATelecharger()))} à récupérer, une seule fois.`
+            }
+          </p>
+        </div>
+
+        <div class="setup__bloc">
+          <div class="launcher__section-label">Moteurs</div>
+          <div class="setup__list">${moteursEssentiels().map(carteRequise).join("")}</div>
+          ${
+            travailEnCours
+              ? `<div class="setup__global">
+                  <div class="progress"><div class="progress__bar" id="setup-global"></div></div>
+                  <p class="setup__note" id="setup-global-note"></p>
+                </div>`
+              : ""
+          }
+          ${
+            tousPrets || travailEnCours
+              ? ""
+              : `<p class="setup__note">
+                  Sans eux, la suite fonctionne déjà : la conversion passe par le moteur
+                  intégré, qui rend la structure des documents mais perd les tableaux
+                  et les notes.
+                </p>`
+          }
+        </div>
+
+        ${
+          optionnels.length === 0
+            ? ""
+            : `<div class="setup__bloc">
+                 <div class="launcher__section-label">Pour aller plus loin</div>
+                 <div class="setup__list">${optionnels.map(carteOptionnelle).join("")}</div>
+                 <p class="setup__note">
+                   Celui-ci ne s'installe que si vous le demandez, et peut être ajouté
+                   plus tard depuis le Convertisseur.
+                 </p>
+               </div>`
+        }
+
+        <div class="setup__actions">
           ${
             tousPrets
-              ? "Tout est prêt. Derovia dispose de ses moteurs de conversion."
-              : `Derovia utilise des moteurs de conversion externes pour préserver
-                 tableaux, notes et styles. ${escapeHtml(formatBytes(totalATelecharger()))} à récupérer, une seule fois.`
+              ? `<button class="btn btn--primary btn--block" type="button" id="setup-entrer">Entrer dans Derovia</button>`
+              : travailEnCours
+                ? `<button class="btn btn--secondary btn--block" type="button" id="setup-entrer">
+                     Continuer pendant le téléchargement
+                   </button>`
+                : `<button class="btn btn--primary btn--block" type="button" id="setup-installer">
+                     Installer les moteurs
+                   </button>
+                   <button class="btn btn--ghost btn--block" type="button" id="setup-plus-tard">Plus tard</button>`
           }
-        </p>
+        </div>
       </div>
-
-      <div class="launcher__section-label">Moteurs</div>
-      <div class="setup__list">${moteursEssentiels().map(carteRequise).join("")}</div>
-
-      ${
-        travailEnCours
-          ? `<div class="setup__global">
-              <div class="progress"><div class="progress__bar" id="setup-global"></div></div>
-              <p class="engine-card__note" id="setup-global-note"></p>
-            </div>`
-          : ""
-      }
-
-      <div class="setup__actions">
-        ${
-          tousPrets
-            ? `<button class="btn btn--primary" type="button" id="setup-entrer">Entrer dans Derovia</button>`
-            : travailEnCours
-              ? `<button class="btn btn--secondary" type="button" id="setup-entrer">
-                   Continuer pendant le téléchargement
-                 </button>`
-              : `<button class="btn btn--primary" type="button" id="setup-installer">
-                   Installer les moteurs
-                 </button>
-                 <button class="btn btn--ghost" type="button" id="setup-plus-tard">Plus tard</button>`
-        }
-      </div>
-
-      ${
-        tousPrets || travailEnCours
-          ? ""
-          : `<p class="setup__note">
-              Sans ces moteurs, la suite fonctionne déjà : la conversion passe par
-              le moteur intégré, qui rend la structure des documents mais perd les
-              tableaux et les notes.
-            </p>`
-      }
-
-      ${
-        optionnels.length === 0
-          ? ""
-          : `<div class="launcher__section-label setup__optional-label">Pour aller plus loin</div>
-             <div class="setup__list">${optionnels.map(carteOptionnelle).join("")}</div>
-             <p class="setup__note">
-               Celui-ci ne s'installe que si vous le demandez, et peut être ajouté
-               plus tard depuis le Convertisseur.
-             </p>`
-      }
     </div>
   `;
 

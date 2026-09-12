@@ -1,13 +1,16 @@
 /**
  * Point d'entree de la suite Derovia.
  *
- * L'application ouvre sur l'ecran de lancement de la suite. L'espace de travail
- * de l'outil selectionne est demarre a la demande.
+ * Trois etapes, dans cet ordre : la porte, qui n'ouvre qu'a un compte ; la
+ * preparation, qui recupere les moteurs de conversion au premier lancement ;
+ * puis l'accueil de la suite. L'espace de travail d'un outil est demarre a la
+ * demande.
  */
 
 import "./styles.css";
 
 import { mountLauncher } from "./launcher";
+import { exigerCompte } from "./porte";
 import { surveillerMiseAJour } from "./maj";
 import { preparer } from "./setup";
 import type { SuiteTool } from "./suite";
@@ -25,6 +28,7 @@ function routeTool(tool: SuiteTool): void {
   }
 }
 
+const ecranPorte = document.querySelector<HTMLElement>("#porte");
 const ecranPreparation = document.querySelector<HTMLElement>("#setup");
 const ecranLanceur = document.querySelector<HTMLElement>("#launcher");
 
@@ -35,10 +39,19 @@ function entrerDansLaSuite(): void {
   mountLauncher(routeTool);
 }
 
-if (ecranPreparation) {
-  void preparer(ecranPreparation, entrerDansLaSuite);
+/** Une fois le compte etabli, installe les moteurs manquants puis ouvre. */
+function apresConnexion(): void {
+  if (ecranPreparation) {
+    void preparer(ecranPreparation, entrerDansLaSuite);
+  } else {
+    entrerDansLaSuite();
+  }
+}
+
+if (ecranPorte) {
+  void exigerCompte(ecranPorte, apresConnexion);
 } else {
-  entrerDansLaSuite();
+  apresConnexion();
 }
 
 // La verification part apres l'affichage : elle ne doit jamais retarder

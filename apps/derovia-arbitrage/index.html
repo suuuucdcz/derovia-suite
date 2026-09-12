@@ -6,15 +6,15 @@
     <title>Derovia Arbitrage</title>
   </head>
   <body>
+    <!-- ═══ La porte : aucun outil sans compte ═══════════════════════════ -->
+    <div class="launcher" id="porte" hidden></div>
+
     <!-- ═══ Préparation du premier lancement ═════════════════════════════ -->
     <div class="launcher" id="setup" hidden></div>
 
     <!-- ═══ Écran de lancement ═══════════════════════════════════════════ -->
     <div class="launcher" id="launcher" hidden>
-      <header class="launcher__topbar">
-        <button class="btn btn--ghost" type="button" data-auth="signin">Se connecter</button>
-        <button class="btn btn--primary" type="button" data-auth="signup">Créer un compte</button>
-      </header>
+      <header class="launcher__topbar"></header>
 
       <div class="launcher__body">
         <div class="launcher__hero">
@@ -75,59 +75,6 @@
     </div>
 
     <!-- ═══ Fenêtre de compte ════════════════════════════════════════════ -->
-    <div class="modal" id="auth-modal" hidden>
-      <div class="modal__veil" data-close-modal></div>
-      <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="auth-title">
-        <button class="modal__close" type="button" data-close-modal aria-label="Fermer">×</button>
-
-        <h2 class="modal__title" id="auth-title">Se connecter</h2>
-        <p class="modal__lede" id="auth-lede">
-          Retrouvez vos scénarios sur tous vos postes.
-        </p>
-
-        <div class="segmented" role="tablist" id="auth-switch">
-          <div class="segmented__thumb" id="auth-thumb"></div>
-          <button type="button" role="tab" data-mode="signin" aria-selected="true">
-            Se connecter
-          </button>
-          <button type="button" role="tab" data-mode="signup" aria-selected="false">
-            Créer un compte
-          </button>
-        </div>
-
-        <form class="auth-form" id="auth-form" style="margin-top: var(--space-5)">
-          <label class="field" id="auth-name-field" hidden>
-            <span class="field__label">Nom</span>
-            <span class="input">
-              <input type="text" name="nom" autocomplete="name" placeholder="Votre nom" />
-            </span>
-          </label>
-
-          <label class="field">
-            <span class="field__label">Adresse e-mail</span>
-            <span class="input">
-              <input type="email" name="email" id="auth-email" autocomplete="email" placeholder="vous@exemple.fr" required />
-            </span>
-          </label>
-
-          <label class="field">
-            <span class="field__label">Mot de passe</span>
-            <span class="input">
-              <input type="password" name="motdepasse" id="auth-password" autocomplete="current-password" placeholder="••••••••" required minlength="6" />
-            </span>
-          </label>
-
-          <p class="auth-form__note" id="auth-message" hidden></p>
-
-          <button class="btn btn--primary" type="submit" id="auth-submit">Continuer</button>
-
-          <p class="auth-form__small">
-            Vos fichiers ne quittent jamais cette machine&nbsp;: le compte ne sert
-            qu'à vous identifier.
-          </p>
-        </form>
-      </div>
-    </div>
 
     <!-- ═══ Scénarios enregistrés ════════════════════════════════════════ -->
     <div class="modal" id="scenarios-modal" hidden>

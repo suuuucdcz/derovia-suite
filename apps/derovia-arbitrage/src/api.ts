@@ -29,6 +29,7 @@ import type {
 interface DevFixtures {
   catalogue: PresetCard[];
   analyses: Record<string, Analysis>;
+  moteurs: EngineStatus[];
 }
 
 let fixtures: Promise<DevFixtures> | null = null;
@@ -173,9 +174,16 @@ export async function lireFichier(file: File): Promise<number[]> {
   return Array.from(new Uint8Array(await file.arrayBuffer()));
 }
 
-/** L'etat de chacun des moteurs externes. */
+/**
+ * L'etat de chacun des moteurs externes.
+ *
+ * Hors de la fenetre Tauri, un enregistrement fige permet de travailler
+ * l'ecran de preparation dans un navigateur. Sans lui, cet ecran etait
+ * invisible partout ailleurs que dans l'application compilee — et donc juge
+ * a l'aveugle.
+ */
 export async function moteursStatut(): Promise<EngineStatus[]> {
-  if (!inTauri()) throw moteurIndisponible("moteur");
+  if (!inTauri()) return (await devFixtures()).moteurs;
   return invoke<EngineStatus[]>("moteurs_statut");
 }
 

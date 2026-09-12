@@ -1196,6 +1196,13 @@
   border-color: var(--positive-soft);
 }
 
+/* Le bouton suit l'alignement du texte qu'il conclut. Centre, il flottait au
+   milieu d'une carte dont tout le reste commence a gauche. */
+.engine-card .btn {
+  align-self: flex-start;
+  margin-top: var(--space-1);
+}
+
 .engine-card__head {
   display: flex;
   align-items: center;
@@ -1286,51 +1293,123 @@
 /* Les cartes gardent une largeur de lecture. Sans borne haute, un moteur seul
    occupait toute la fenetre, et la barre de progression qu'il contient se
    retrouvait etiree sur pres d'un metre d'ecran : un fil, pas une barre. */
+/* L'ecran de preparation tient dans une colonne unique. Etale sur toute la
+   largeur, il donnait des libelles cales a gauche, des cartes centrees et une
+   barre de progression tendue d'un bord a l'autre : trois alignements
+   differents pour trois elements qui se suivent. */
+.setup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.setup__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+/* Plus discret que la marque de l'accueil : cet ecran est une etape, pas une
+   destination. */
+.setup__titre {
+  margin: 0;
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+}
+
+.setup__lede {
+  margin: 0;
+  color: var(--ink-secondary);
+  font-size: var(--text-base);
+  line-height: 1.55;
+}
+
+.setup__bloc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Une carte par ligne : elles partagent la largeur de la colonne, donc celle
+   des libelles qui les annoncent. */
 .setup__list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 320px));
-  justify-content: center;
+  display: flex;
+  flex-direction: column;
   gap: var(--space-3);
   width: 100%;
 }
 
-/* Meme raison : une progression se lit d'un coup d'oeil, ce qui suppose de
-   pouvoir en embrasser les deux extremites sans balayer l'ecran. */
 .setup__global {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: var(--space-2);
   width: 100%;
-  max-width: 320px;
-  margin-top: var(--space-6);
-  text-align: center;
-}
-
-.setup__global .progress {
-  width: 100%;
-}
-
-/* La section optionnelle se detache de ce qui precede : sans cet ecart, elle
-   se lit comme la suite des moteurs requis. */
-.setup__optional-label {
-  margin-top: var(--space-8);
 }
 
 .setup__actions {
   display: flex;
-  justify-content: center;
-  gap: var(--space-3);
-  margin-top: var(--space-8);
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
 .setup__note {
-  max-width: 58ch;
-  margin: var(--space-4) auto 0;
+  margin: 0;
   color: var(--ink-tertiary);
   font-size: var(--text-xs);
   line-height: 1.5;
+}
+
+/* Le libelle de section n'a plus a se decaler : il commence ou commencent les
+   cartes. */
+.setup .launcher__section-label {
+  margin-bottom: 0;
+}
+
+/* --- La porte ------------------------------------------------------------
+   Aucun outil sans compte. L'ecran occupe la fenetre et ne se ferme pas. */
+
+.porte {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
   text-align: center;
+}
+
+.porte__titre {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+}
+
+.porte__lede {
+  margin: 0;
+  color: var(--ink-secondary);
+  font-size: var(--text-base);
+  line-height: 1.55;
+}
+
+/* Les champs se lisent alignes a gauche, meme sous un titre centre. */
+.porte__form {
+  width: 100%;
+  text-align: left;
+}
+
+.porte__note {
+  margin: 0;
+  color: var(--ink-tertiary);
+  font-size: var(--text-xs);
+  line-height: 1.5;
 }
 
 /* --- Scenarios enregistres ------------------------------------------------
