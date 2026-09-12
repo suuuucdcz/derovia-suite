@@ -48,10 +48,14 @@ fn reader_name(source: SourceFormat) -> Option<&'static str> {
         // Du texte brut est du Markdown valide : le lire ainsi preserve les
         // paragraphes, la ou un lecteur « plain » n'existe pas chez Pandoc.
         SourceFormat::Markdown | SourceFormat::Text => Some("markdown"),
-        // Pandoc n'a aucun lecteur PDF, et ne lit pas le .doc binaire.
+        // Pandoc n'a aucun lecteur PDF, ne lit pas le .doc binaire, et laisse
+        // les classeurs et presentations au moteur haute fidelite.
         SourceFormat::Pdf
         | SourceFormat::DocLegacy
         | SourceFormat::Image
+        | SourceFormat::Odt
+        | SourceFormat::Spreadsheet
+        | SourceFormat::Presentation
         | SourceFormat::Unknown => None,
     }
 }

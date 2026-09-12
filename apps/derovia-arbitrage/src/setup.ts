@@ -48,18 +48,31 @@ function marquerVu(): void {
   }
 }
 
+/**
+ * Les moteurs que la preparation installe.
+ *
+ * Les moteurs optionnels en sont exclus : le moteur haute fidelite pese 1,5 Go
+ * une fois deplie, et l'imposer au premier lancement ferait fuir la plupart des
+ * gens pour une capacite dont beaucoup n'auront jamais besoin. Il est propose
+ * plus tard, la ou il change vraiment le resultat.
+ */
+function moteursEssentiels(): EngineStatus[] {
+  return moteurs.filter((moteur) => !moteur.optional);
+}
+
 /** La somme de ce qui reste a telecharger. */
 function totalATelecharger(): number {
-  return moteurs
+  return moteursEssentiels()
     .filter((moteur) => !moteur.installed)
     .reduce((somme, moteur) => somme + moteur.downloadBytes, 0);
 }
 
 /** La fraction globale deja recue, de 0 a 1. */
 function fractionGlobale(): number {
-  const total = moteurs.reduce((somme, moteur) => somme + moteur.downloadBytes, 0);
+  const essentiels = moteursEssentiels();
+  const total = essentiels.reduce((somme, moteur) => somme + moteur.downloadBytes, 0);
   if (total === 0) return 1;
-  const recus = moteurs.reduce((somme, moteur) => {
+  const recus = essentiels.reduce((somme, moteur) => {
     if (moteur.installed) return somme + moteur.downloadBytes;
     return somme + (avancement.get(moteur.id)?.recus ?? 0);
   }, 0);
@@ -104,7 +117,7 @@ function ligneMoteur(moteur: EngineStatus): string {
 
 /** Dessine l'ecran. */
 function render(racine: HTMLElement, onTermine: () => void): void {
-  const manquants = moteurs.filter((moteur) => !moteur.installed);
+  const manquants = moteursEssentiels().filter((moteur) => !moteur.installed);
   const tousPrets = manquants.length === 0;
 
   racine.innerHTML = `
@@ -124,7 +137,7 @@ function render(racine: HTMLElement, onTermine: () => void): void {
       </div>
 
       <div class="launcher__section-label">Moteurs</div>
-      <div class="setup__list">${moteurs.map(ligneMoteur).join("")}</div>
+      <div class="setup__list">${moteursEssentiels().map(ligneMoteur).join("")}</div>
 
       ${
         enCours
@@ -246,7 +259,7 @@ export async function preparer(racine: HTMLElement, onTermine: () => void): Prom
     return;
   }
 
-  const manquants = moteurs.some((moteur) => !moteur.installed);
+  const manquants = moteursEssentiels().some((moteur) => !moteur.installed);
   if (!manquants || dejaVu()) {
     onTermine();
     return;

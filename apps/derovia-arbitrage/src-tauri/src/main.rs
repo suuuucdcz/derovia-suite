@@ -69,12 +69,10 @@ fn convertir_document(
 ) -> Result<derovia_convert::ConversionResult, CoreError> {
     let source = derovia_convert::SourceFormat::detect(&file_name, &input_bytes);
 
-    if derovia_engines::handles(source, target_format)
-        && let Ok(base) = dossier_donnees(&app)
-        && derovia_engines::pandoc_status(&base).installed
+    if let Ok(base) = dossier_donnees(&app)
+        && let Some(data) =
+            convertir_par_moteur_externe(&base, &input_bytes, source, target_format)?
     {
-        let executable = derovia_engines::install::pandoc_path(&base);
-        let data = derovia_engines::run_pandoc(&executable, &input_bytes, source, target_format)?;
         let stem = std::path::Path::new(&file_name)
             .file_stem()
             .and_then(|valeur| valeur.to_str())
@@ -89,6 +87,43 @@ fn convertir_document(
     }
 
     derovia_convert::convert_document(&file_name, &input_bytes, target_format, &options)
+}
+
+/// Choisit le moteur externe le plus apte, s'il en existe un d'installe.
+///
+/// L'ordre compte. Le moteur haute fidelite passe en premier sur ce qu'il est
+/// seul a bien faire — le `.doc` binaire, les classeurs, un PDF avec sa mise en
+/// page. Pandoc prend ensuite tout le balisage, ou il est meilleur et bien plus
+/// rapide. Le moteur haute fidelite ferme la marche pour le reste de son
+/// perimetre, et le moteur interne reste le filet de securite.
+///
+/// Renvoie `Ok(None)` quand aucun moteur externe ne convient : l'appelant
+/// retombe alors sur le moteur interne, qui fonctionne sans rien installer.
+fn convertir_par_moteur_externe(
+    base: &std::path::Path,
+    input_bytes: &[u8],
+    source: derovia_convert::SourceFormat,
+    target: derovia_convert::TargetFormat,
+) -> Result<Option<Vec<u8>>, CoreError> {
+    let haute_fidelite = derovia_engines::status(base, &derovia_engines::LIBREOFFICE).installed;
+    let chemin_hf = derovia_engines::install::executable_path(base, &derovia_engines::LIBREOFFICE);
+
+    if haute_fidelite && derovia_engines::libreoffice::required_for(source, target) {
+        return derovia_engines::libreoffice::convert(&chemin_hf, input_bytes, source, target)
+            .map(Some);
+    }
+
+    if derovia_engines::pandoc_status(base).installed && derovia_engines::handles(source, target) {
+        let executable = derovia_engines::install::pandoc_path(base);
+        return derovia_engines::run_pandoc(&executable, input_bytes, source, target).map(Some);
+    }
+
+    if haute_fidelite && derovia_engines::libreoffice::handles(source, target) {
+        return derovia_engines::libreoffice::convert(&chemin_hf, input_bytes, source, target)
+            .map(Some);
+    }
+
+    Ok(None)
 }
 
 /// L'etat de chacun des moteurs externes, et ce qu'ils couteraient.

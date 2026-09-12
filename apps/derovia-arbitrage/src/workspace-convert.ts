@@ -41,10 +41,10 @@ const ICONE = `
 /** Le format cible, conserve d'un rendu a l'autre. */
 let cible = "pdf";
 
-/** L'etat du moteur Pandoc, une fois interroge. */
-let moteur: EngineStatus | null = null;
-/** Vrai pendant le telechargement. */
-let installation = false;
+/** L'etat de chaque moteur externe, une fois interroge. */
+let moteurs: EngineStatus[] = [];
+/** L'identifiant du moteur en cours de telechargement, le cas echeant. */
+let installationEnCours: string | null = null;
 /** Permet de redessiner depuis le suivi d'installation. */
 let redessinerEcran: (() => void) | null = null;
 
@@ -56,25 +56,54 @@ function enMo(octets: number): string {
   return `${Math.round(octets / (1024 * 1024))} Mo`;
 }
 
+/** Le moteur pertinent pour le format de sortie choisi. */
+function moteurPourLaCible(): { id: string; argument: string } | null {
+  // Vers un PDF, c'est la fidelite de mise en page qui fait la difference :
+  // polices, images, tableaux. Le moteur haute fidelite est seul a la rendre.
+  if (cible === "pdf") {
+    return {
+      id: "libreoffice",
+      argument:
+        "Le moteur intégré produit un PDF de texte brut, sans styles ni images. " +
+        "Le moteur haute fidélité conserve la mise en page d'origine, et ouvre " +
+        "en plus les .doc, .odt, .xlsx et .pptx.",
+    };
+  }
+  // Vers un format balisé, Pandoc est meilleur et bien plus rapide.
+  if (CIBLES_PANDOC.has(cible)) {
+    return {
+      id: "pandoc",
+      argument:
+        "Le moteur intégré rend la structure du document mais perd les tableaux " +
+        "et les notes de bas de page. Le moteur avancé les conserve.",
+    };
+  }
+  return null;
+}
+
 /**
- * La carte d'etat du moteur avance.
+ * La carte du moteur pertinent pour la conversion en cours.
  *
- * Elle n'apparait que pour les formats ou Pandoc apporte quelque chose : la
- * proposer avant une conversion vers PDF, qu'il ne sait pas produire, serait
- * trompeur.
+ * Elle ne s'affiche que la ou le moteur change reellement le resultat :
+ * proposer un telechargement de plusieurs centaines de megaoctets pour une
+ * conversion que l'outil assure deja tres bien serait deplace.
  */
 function carteMoteur(): string {
-  if (!moteur || !CIBLES_PANDOC.has(cible)) return "";
+  const pertinent = moteurPourLaCible();
+  if (!pertinent) return "";
 
-  if (installation) {
+  const moteur = moteurs.find((candidat) => candidat.id === pertinent.id);
+  if (!moteur) return "";
+
+  if (installationEnCours === moteur.id) {
     return `<div class="engine-card" data-state="installing">
       <div class="engine-card__head">
         <span class="engine-card__dot"></span>
-        <span class="engine-card__name">Installation du moteur avancé</span>
+        <span class="engine-card__name">Téléchargement en cours</span>
         <span class="engine-card__badge" id="moteur-pourcent">0 %</span>
       </div>
       <div class="progress"><div class="progress__bar" id="moteur-barre"></div></div>
-      <p class="engine-card__note">Téléchargement en cours. Vous pouvez continuer à utiliser l'outil.</p>
+      <p class="engine-card__note">Vous pouvez continuer à utiliser l'outil pendant ce temps.</p>
     </div>`;
   }
 
@@ -82,26 +111,26 @@ function carteMoteur(): string {
     return `<div class="engine-card" data-state="ready">
       <div class="engine-card__head">
         <span class="engine-card__dot"></span>
-        <span class="engine-card__name">Moteur avancé actif</span>
-        <span class="engine-card__badge">${escapeHtml(moteur.version ?? "Pandoc")}</span>
+        <span class="engine-card__name">${escapeHtml(moteur.label)} actif</span>
+        <span class="engine-card__badge">${escapeHtml(moteur.version ?? "")}</span>
       </div>
-      <p class="engine-card__note">Tableaux, notes de bas de page et styles sont conservés.</p>
+      <p class="engine-card__note">Vos conversions utilisent la meilleure qualité disponible.</p>
     </div>`;
   }
 
   return `<div class="engine-card" data-state="missing">
     <div class="engine-card__head">
       <span class="engine-card__dot"></span>
-      <span class="engine-card__name">Moteur avancé disponible</span>
-      <span class="engine-card__badge">Pandoc</span>
+      <span class="engine-card__name">Meilleur résultat disponible</span>
+      <span class="engine-card__badge">${enMo(moteur.downloadBytes)} à télécharger</span>
     </div>
     <p class="engine-card__note">
-      Le moteur intégré rend la structure du document mais perd les tableaux et
-      les notes. Pandoc les conserve. ${enMo(moteur.downloadBytes)} à télécharger,
-      ${enMo(moteur.installedBytes)} sur le disque.
+      ${escapeHtml(pertinent.argument)}
+      Compter ${enMo(moteur.installedBytes)} sur le disque.
     </p>
-    <button class="btn btn--secondary btn--sm" type="button" id="moteur-installer">
-      Installer le moteur avancé
+    <button class="btn btn--secondary btn--sm" type="button" id="moteur-installer"
+            data-moteur-id="${escapeHtml(moteur.id)}">
+      Activer le meilleur résultat
     </button>
   </div>`;
 }
@@ -109,10 +138,10 @@ function carteMoteur(): string {
 /** Interroge le moteur et rafraichit l'ecran quand la reponse arrive. */
 async function rafraichirMoteur(): Promise<void> {
   try {
-    moteur = (await moteursStatut()).find((candidat) => candidat.id === "pandoc") ?? null;
+    moteurs = await moteursStatut();
   } catch {
     // Hors de la fenetre Tauri, la carte reste simplement absente.
-    moteur = null;
+    moteurs = [];
   }
   redessinerEcran?.();
 }
@@ -123,11 +152,13 @@ async function rafraichirMoteur(): Promise<void> {
  * La barre est mise a jour directement, sans redessiner l'ecran : un rendu
  * complet a chaque paquet recu ferait clignoter toute la colonne.
  */
-async function lancerInstallation(redessiner: () => void): Promise<void> {
-  installation = true;
+async function lancerInstallation(id: string, redessiner: () => void): Promise<void> {
+  installationEnCours = id;
   redessiner();
 
-  const cesser = await suivreInstallation(({ recus, attendus }) => {
+  const cesser = await suivreInstallation((progression) => {
+    if (progression.id !== id) return;
+    const { recus, attendus } = progression;
     const fraction = attendus > 0 ? Math.min(recus / attendus, 1) : 0;
     document
       .querySelector<HTMLElement>("#moteur-barre")
@@ -137,14 +168,14 @@ async function lancerInstallation(redessiner: () => void): Promise<void> {
   });
 
   try {
-    moteur = await installerMoteur("pandoc");
+    await installerMoteur(id);
   } catch (erreur: unknown) {
-    moteur = (await moteursStatut().catch(() => [])).find((c) => c.id === "pandoc") ?? null;
     const message = erreur instanceof Error ? erreur.message : String(erreur);
     console.error("[Derovia] installation du moteur impossible :", message);
   } finally {
     cesser();
-    installation = false;
+    installationEnCours = null;
+    moteurs = await moteursStatut().catch(() => moteurs);
     redessiner();
   }
 }
@@ -190,8 +221,10 @@ export function startConvertWorkspace(): void {
         redessiner();
       });
 
-      root.querySelector<HTMLButtonElement>("#moteur-installer")?.addEventListener("click", () => {
-        void lancerInstallation(redessiner);
+      const bouton = root.querySelector<HTMLButtonElement>("#moteur-installer");
+      bouton?.addEventListener("click", () => {
+        const id = bouton.dataset["moteurId"];
+        if (id) void lancerInstallation(id, redessiner);
       });
     },
 

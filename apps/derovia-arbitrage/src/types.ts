@@ -173,6 +173,8 @@ export interface EngineStatus {
   downloadBytes: number;
   /** Poids sur le disque une fois installe, en octets. */
   installedBytes: number;
+  /** Vrai quand le moteur ne s'installe qu'a la demande expresse. */
+  optional: boolean;
 }
 
 /** L'avancement du telechargement d'un moteur. */

@@ -50,6 +50,12 @@ pub struct EngineSpec {
     pub executable: &'static str,
     /// La facon de deplier l'archive.
     pub archive: ArchiveKind,
+    /// Vrai quand le moteur ne s'installe qu'a la demande expresse.
+    ///
+    /// L'ecran de preparation n'installe que les moteurs essentiels. Un moteur
+    /// optionnel — lourd, utile a une minorite — reste propose la ou il change
+    /// vraiment le resultat, avec son poids annonce.
+    pub optional: bool,
 }
 
 /// Pandoc — la reference pour la conversion de balisage.
@@ -67,13 +73,40 @@ pub const PANDOC: EngineSpec = EngineSpec {
     installed_bytes: 234_000_000,
     executable: "pandoc-3.11/pandoc.exe",
     archive: ArchiveKind::Zip,
+    optional: false,
+};
+
+/// Le moteur haute fidelite, adosse a LibreOffice.
+///
+/// Il apporte deux choses que rien d'autre ne donne : la lecture du `.doc`
+/// binaire de Word 97-2003, et une sortie PDF fidele — mise en page, polices,
+/// images — la ou la generation interne ne pose que du texte.
+///
+/// Il est **lourd** : 356 Mo a recevoir, 1,5 Go une fois deplie. Il ne
+/// s'installe donc jamais tout seul ; l'utilisateur le demande, en connaissant
+/// le prix.
+///
+/// Le paquet est deplie par installation administrative, pas installe : rien
+/// n'est ecrit au registre, aucun raccourci n'est cree, et supprimer le dossier
+/// suffit a s'en debarrasser.
+pub const LIBREOFFICE: EngineSpec = EngineSpec {
+    id: "libreoffice",
+    label: "Moteur haute fidélité",
+    version: "26.2.6",
+    url: "https://download.documentfoundation.org/libreoffice/stable/26.2.6/win/x86_64/LibreOffice_26.2.6_Win_x86-64.msi",
+    sha256: "f9877032fd908beb9c0ddf06df4af5c2e85f419c42e14876c4cce5aae5fb2660",
+    download_bytes: 373_252_096,
+    installed_bytes: 1_596_000_000,
+    executable: "program/soffice.exe",
+    archive: ArchiveKind::MsiAdministrative,
+    optional: true,
 };
 
 /// Tous les moteurs que la suite sait installer.
 ///
 /// L'ecran de preparation du premier lancement parcourt cette liste : ajouter
 /// un moteur a la suite, c'est ajouter une entree ici, rien d'autre.
-pub const ENGINES: &[EngineSpec] = &[PANDOC];
+pub const ENGINES: &[EngineSpec] = &[PANDOC, LIBREOFFICE];
 
 /// Retrouve un moteur par son identifiant.
 #[must_use]
@@ -103,6 +136,8 @@ pub struct EngineStatus {
     pub download_bytes: u64,
     /// Le poids sur le disque une fois installe, en octets.
     pub installed_bytes: u64,
+    /// Vrai quand le moteur ne s'installe qu'a la demande.
+    pub optional: bool,
 }
 
 /// Le dossier dedie a un moteur.
@@ -129,7 +164,18 @@ pub fn status(base: &Path, spec: &EngineSpec) -> EngineStatus {
     // On ne se contente pas de la presence du fichier : un executable present
     // mais incomplet — telechargement interrompu, extraction partielle — doit
     // compter comme absent.
-    let version = chemin.is_file().then(|| crate::pandoc::version(&chemin)).flatten();
+    //
+    // LibreOffice met une trentaine de secondes a repondre la premiere fois,
+    // le temps de batir son profil : l'interroger a chaque affichage figerait
+    // l'interface. Sa presence sur le disque fait donc foi, et sa version
+    // annoncee est celle qui a ete installee.
+    let version = if !chemin.is_file() {
+        None
+    } else if spec.id == LIBREOFFICE.id {
+        Some(format!("LibreOffice {}", spec.version))
+    } else {
+        crate::pandoc::version(&chemin)
+    };
     EngineStatus {
         id: spec.id,
         label: spec.label,
@@ -137,6 +183,7 @@ pub fn status(base: &Path, spec: &EngineSpec) -> EngineStatus {
         version,
         download_bytes: spec.download_bytes,
         installed_bytes: spec.installed_bytes,
+        optional: spec.optional,
     }
 }
 

@@ -26,10 +26,11 @@
 //! il ne le deverrouille pas.
 
 pub mod install;
+pub mod libreoffice;
 pub mod pandoc;
 
 pub use install::{
-    ArchiveKind, ENGINES, EngineSpec, EngineStatus, PANDOC, all_statuses, find, install,
-    install_pandoc, pandoc_status, status,
+    ArchiveKind, ENGINES, EngineSpec, EngineStatus, LIBREOFFICE, PANDOC, all_statuses, find,
+    install, install_pandoc, pandoc_status, status,
 };
 pub use pandoc::{handles, run_pandoc};

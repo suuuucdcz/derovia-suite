@@ -21,6 +21,12 @@ pub enum SourceFormat {
     Image,
     /// Page HTML (.html, .htm).
     Html,
+    /// Document OpenDocument (.odt).
+    Odt,
+    /// Classeur (.xls, .xlsx, .ods, .csv).
+    Spreadsheet,
+    /// Presentation (.ppt, .pptx, .odp).
+    Presentation,
     /// Format inconnu ou non supporte.
     Unknown,
 }
@@ -38,6 +44,9 @@ impl SourceFormat {
             "md" | "markdown" => Self::Markdown,
             "txt" => Self::Text,
             "html" | "htm" => Self::Html,
+            "odt" => Self::Odt,
+            "xls" | "xlsx" | "ods" | "csv" => Self::Spreadsheet,
+            "ppt" | "pptx" | "odp" => Self::Presentation,
             "png" | "jpg" | "jpeg" | "webp" | "bmp" => Self::Image,
             _ => {
                 // Verification par signatures d'octets magiques

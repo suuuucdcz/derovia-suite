@@ -120,6 +120,16 @@ fn extract_document(source: SourceFormat, input_bytes: &[u8]) -> Result<Document
              dans Word et enregistrez-le en .docx, puis relancez la conversion."
                 .to_owned(),
         )),
+        // Ces formats bureautiques demandent le moteur haute fidelite. Le dire
+        // vaut mieux que d'en tirer une approximation.
+        SourceFormat::Odt | SourceFormat::Spreadsheet | SourceFormat::Presentation => {
+            Err(CoreError::failure(
+                "moteur_requis",
+                "Ce format demande le moteur haute fidélité. Installez-le depuis \
+                 les options du convertisseur."
+                    .to_owned(),
+            ))
+        }
         // Traiter un binaire inconnu comme du texte produirait une suite de
         // caracteres de remplacement, presentee comme une conversion reussie.
         SourceFormat::Image | SourceFormat::Unknown => Err(CoreError::failure(
