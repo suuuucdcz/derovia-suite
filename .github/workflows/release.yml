@@ -30,6 +30,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # On s'arrete ici si la cle manque, avant que quoi que ce soit ne soit
+      # mis en ligne. Sans ce garde-fou, la release serait creee d'abord et
+      # l'absence de signature ne se verrait qu'ensuite : une version publiee
+      # que personne ne pourrait recevoir en mise a jour.
+      - name: La cle de signature est en place
+        shell: bash
+        run: |
+          if [ -z "${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}" ]; then
+            echo "Le secret TAURI_SIGNING_PRIVATE_KEY est absent du depot."
+            echo "Settings > Secrets and variables > Actions > New repository secret."
+            echo "Voir docs/PUBLIER.md."
+            exit 1
+          fi
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
