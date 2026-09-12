@@ -1,0 +1,20 @@
+[package]
+name = "derovia-engines"
+description = "Installation et pilotage des moteurs de conversion externes de la suite Derovia"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+derovia-core = { workspace = true }
+derovia-convert = { workspace = true }
+serde = { workspace = true }
+zip = { workspace = true }
+ureq = { workspace = true }
+sha2 = { workspace = true }
+
+[lints]
+workspace = true

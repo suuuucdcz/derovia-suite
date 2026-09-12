@@ -1,0 +1,80 @@
+# Derovia — suite d'outils d'automatisation IA pour Windows.
+# Workspace Cargo : un crate = une responsabilite, une app = un produit de la suite.
+
+[workspace]
+resolver = "3"
+members = [
+    "crates/derovia-core",
+    "crates/derovia-arbitrage",
+    "crates/derovia-convert",
+    "crates/derovia-compress",
+    "crates/derovia-engines",
+    "apps/derovia-arbitrage/src-tauri",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"          # let-chains en edition 2024
+authors = ["Derovia"]
+license = "UNLICENSED"
+publish = false
+
+[workspace.dependencies]
+# Crates internes de la suite
+derovia-core = { path = "crates/derovia-core" }
+derovia-arbitrage = { path = "crates/derovia-arbitrage" }
+derovia-convert = { path = "crates/derovia-convert" }
+derovia-compress = { path = "crates/derovia-compress" }
+derovia-engines = { path = "crates/derovia-engines" }
+
+# Dependances tierces, version unique pour toute la suite
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["float_roundtrip"] }
+thiserror = "2"
+
+# Traitement de documents et d'images, partage par convert et compress.
+# Les formats actives ici sont exactement ceux que la suite declare supporter :
+# annoncer un format non compile revient a promettre une erreur a l'execution.
+image = { version = "0.24", default-features = false, features = ["png", "jpeg", "bmp", "webp", "webp-encoder"] }
+zip = { version = "0.6", default-features = false, features = ["deflate"] }
+quick-xml = "0.42"
+printpdf = { version = "0.7", default-features = false, features = ["embedded_images", "image"] }
+# printpdf 0.7 epingle lopdf 0.31 en interne, alors que notre extraction de
+# texte a besoin de l'API 0.35 (Encoding a change de place, get_page_fonts ne
+# renvoie plus un Result). Deux versions cohabitent donc dans le binaire ; c'est
+# assume et ce sera resorbe le jour ou printpdf montera de version.
+lopdf = "0.35"
+
+# Telechargement des moteurs externes. ureq + rustls evite toute dependance a
+# une bibliotheque TLS du systeme, et sha2 verifie l'empreinte du fichier recu.
+ureq = { version = "3", default-features = false, features = ["rustls"] }
+sha2 = "0.10"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+unreachable_pub = "warn"
+
+[workspace.lints.clippy]
+# Refuse ce qui peut planter en production
+unwrap_used = "warn"
+expect_used = "warn"
+panic = "warn"
+indexing_slicing = "warn"
+# Precision numerique : critique pour un moteur financier
+float_cmp = "warn"
+cast_precision_loss = "warn"
+cast_possible_truncation = "warn"
+
+# Le build de dev reste rapide, la release est optimisee pour la taille du binaire
+[profile.dev]
+opt-level = 0
+debug = true
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

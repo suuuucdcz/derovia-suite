@@ -1,0 +1,17 @@
+/* ============================================================================
+   Derovia — design system
+   ----------------------------------------------------------------------------
+   Point d'entree unique. Un outil de la suite importe ce fichier et rien
+   d'autre : l'ordre des trois feuilles compte, les jetons devant tout le reste.
+
+       @import "@derovia/design";
+
+   Il ne redefinit ensuite que sa couleur d'accent :
+
+       :root { --accent: #0a7d6b; }
+   ========================================================================== */
+
+@import "./tokens.css";
+@import "./base.css";
+@import "./components.css";
+@import "./launcher.css";

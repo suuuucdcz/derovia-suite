@@ -1,0 +1,3 @@
+# Un moteur financier manipule beaucoup de constantes chiffrees : on les tolere.
+avoid-breaking-exported-api = false
+too-many-arguments-threshold = 10

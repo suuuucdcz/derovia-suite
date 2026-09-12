@@ -1,0 +1,28 @@
+# Rust
+/target
+**/target
+Cargo.lock.bak
+
+# Node / frontend
+node_modules
+dist
+.vite
+
+# Configuration locale : l'exemple est versionne, pas les vraies valeurs.
+.env
+.env.local
+!.env.example
+
+# Tauri
+apps/*/src-tauri/target
+apps/*/src-tauri/gen
+
+# Documentation API generee (lourde, regenerable via scripts/docs.ps1 -Regenerer)
+/target/doc
+
+# OS / editeurs
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.swp
+.idea/

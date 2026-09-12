@@ -1,0 +1,318 @@
+/* ============================================================================
+   Derovia — ecran de lancement
+   ----------------------------------------------------------------------------
+   L'accueil commun a toute la suite : la marque, l'acces au compte, et la
+   grille des outils. Il appartient au design system et non a un outil, parce
+   que chaque outil de Derovia ouvre sur le meme ecran.
+
+   Le jour ou la suite aura son propre lanceur — un binaire qui demarre les
+   autres — ce fichier sera son interface, sans etre reecrit.
+   ========================================================================== */
+
+.launcher {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--canvas);
+  /* Une lueur d'accent tres diluee derriere la marque. Elle ne se voit pas
+     consciemment ; elle empeche le fond de paraitre plat. */
+  background-image: radial-gradient(
+    ellipse 900px 520px at 50% -8%,
+    var(--accent-soft),
+    transparent 70%
+  );
+}
+
+.launcher__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  flex: none;
+  padding: var(--space-5) var(--space-8);
+}
+
+.launcher__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Le contenu se centre verticalement : un lanceur dont tout est colle en
+     haut, avec un grand vide dessous, a l'air inacheve. */
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-8) var(--space-10);
+}
+
+/* --- La marque ----------------------------------------------------------- */
+
+.launcher__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-10);
+  text-align: center;
+}
+
+.launcher__mark {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(150deg, var(--accent), var(--accent-pressed));
+  color: var(--accent-ink);
+  font-family: var(--font-sans);
+  font-size: 2.25rem;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0;
+  box-shadow: var(--shadow-md);
+}
+
+.launcher__wordmark {
+  font-family: var(--font-sans);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: 1;
+}
+
+.launcher__tagline {
+  max-width: 46ch;
+  color: var(--ink-tertiary);
+  font-size: var(--text-lg);
+  line-height: 1.4;
+}
+
+/* --- La grille des outils ------------------------------------------------ */
+
+.launcher__section-label {
+  align-self: flex-start;
+  margin-bottom: var(--space-4);
+  color: var(--ink-tertiary);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.tool-grid {
+  display: grid;
+  /* Des cartes plus larges donnent trois colonnes : six outils se rangent en
+     deux rangees pleines, la ou quatre colonnes laissaient une rangee
+     orpheline qui se lit comme un debordement. */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.tool-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  text-align: left;
+  transition: transform var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+
+.tool-card:not([disabled]):hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-lg);
+}
+
+.tool-card:not([disabled]):active {
+  transform: translateY(0);
+}
+
+.tool-card[disabled] {
+  background: transparent;
+  box-shadow: none;
+  cursor: default;
+}
+
+.tool-card__glyph {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: var(--text-xl);
+}
+
+.tool-card[disabled] .tool-card__glyph {
+  background: var(--surface-sunken);
+  color: var(--ink-quaternary);
+}
+
+.tool-card__name {
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-snug);
+}
+
+.tool-card[disabled] .tool-card__name {
+  color: var(--ink-tertiary);
+}
+
+.tool-card__desc {
+  flex: 1;
+  color: var(--ink-tertiary);
+  font-size: var(--text-sm);
+  line-height: 1.4;
+}
+
+.tool-card__action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--accent);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.tool-card[disabled] .tool-card__action {
+  color: var(--ink-quaternary);
+}
+
+.launcher__footer {
+  flex: none;
+  padding: var(--space-6) var(--space-8);
+  color: var(--ink-quaternary);
+  font-size: var(--text-xs);
+  text-align: center;
+}
+
+/* --- Fenetre modale ------------------------------------------------------
+   Le voile floute le fond plutot que de l'assombrir seulement : la fenetre
+   parait posee au-dessus de l'application, pas collee dessus. */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+}
+
+.modal__veil {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: veil-in var(--duration) var(--ease) both;
+}
+
+.modal__card {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  padding: var(--space-8);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-2xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+  animation: modal-in var(--duration) var(--ease-out) both;
+}
+
+.modal__close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  color: var(--ink-tertiary);
+  font-size: var(--text-lg);
+  line-height: 1;
+  transition: background var(--duration-fast) var(--ease), color var(--duration-fast) var(--ease);
+}
+
+.modal__close:hover {
+  background: var(--surface-sunken);
+  color: var(--ink);
+}
+
+.modal__title {
+  margin-bottom: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+}
+
+.modal__lede {
+  margin-bottom: var(--space-6);
+  color: var(--ink-tertiary);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+}
+
+@keyframes veil-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --- Formulaire de compte ------------------------------------------------ */
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.auth-form .btn {
+  height: 42px;
+  margin-top: var(--space-1);
+}
+
+.auth-form__note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  color: var(--ink-secondary);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+}
+
+.auth-form__small {
+  color: var(--ink-quaternary);
+  font-size: var(--text-xs);
+  line-height: 1.45;
+  text-align: center;
+}

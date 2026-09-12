@@ -1,0 +1,9 @@
+# Raccourcis : `cargo lint`, `cargo t`, `cargo docs`
+[alias]
+lint = "clippy --workspace --all-targets --all-features"
+strict = "clippy --workspace --all-targets --all-features -- -D warnings"
+t = "test --workspace"
+docs = "doc --workspace --no-deps"
+
+[net]
+git-fetch-with-cli = true

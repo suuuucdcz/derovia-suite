@@ -1,0 +1,25 @@
+[package]
+name = "derovia-arbitrage-app"
+description = "Derovia Arbitrage — application de bureau"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+derovia-core = { workspace = true }
+derovia-arbitrage = { workspace = true }
+derovia-convert = { workspace = true }
+derovia-compress = { workspace = true }
+derovia-engines = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tauri = { version = "2", features = [] }
+
+[lints]
+workspace = true

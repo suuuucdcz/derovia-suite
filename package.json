@@ -1,0 +1,14 @@
+{
+  "name": "derovia",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Suite d'outils d'automatisation IA pour Windows",
+  "type": "module",
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "dev": "npm run app -w @derovia/arbitrage",
+    "build": "npm run app:build -w @derovia/arbitrage",
+    "check": "npm run check -w @derovia/arbitrage"
+  },
+  "engines": { "node": ">=20" }
+}

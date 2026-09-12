@@ -1,0 +1,68 @@
+/* ============================================================================
+   Derovia Arbitrage — feuille propre a l'outil
+   ----------------------------------------------------------------------------
+   Tout le vocabulaire visuel vient du design system. Ce fichier ne contient que
+   ce qui n'a de sens que pour cet outil : l'agencement de son formulaire.
+   Si une regle d'ici devient utile a un deuxieme outil, sa place est dans
+   @derovia/design, pas ici.
+   ========================================================================== */
+
+@import "@derovia/design";
+
+/* Le formulaire est long : les groupes ont besoin d'une respiration franche et
+   d'un titre discret, sinon quinze champs se lisent comme un mur. */
+
+.field-block + .field-block {
+  margin-top: var(--space-6);
+}
+
+.field-block__title {
+  margin-bottom: var(--space-4);
+  color: var(--ink-tertiary);
+  font-family: var(--font-text);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.field-block__body {
+  padding-bottom: var(--space-5);
+}
+
+.disclosure:first-of-type {
+  margin-top: var(--space-6);
+}
+
+/* L'horizon est le reglage le plus decisif de l'outil : il est seul dans sa
+   carte, au-dessus du reste, et son curseur occupe toute la largeur. */
+
+.horizon {
+  margin-top: var(--space-6);
+}
+
+.horizon .slider {
+  margin-top: var(--space-1);
+}
+
+/* Le tableau vit dans une carte sans rembourrage : il apporte le sien pour que
+   ses lignes de survol aillent d'un bord a l'autre. */
+
+.card--flush .ledger {
+  padding: 0;
+}
+
+.card--flush .ledger th,
+.card--flush .ledger td {
+  padding-inline: var(--space-6);
+}
+
+.card--flush .ledger thead th:first-child {
+  border-top-left-radius: var(--radius-xl);
+}
+
+/* Le graphique garde une hauteur confortable meme dans une fenetre etroite. */
+
+.chart {
+  min-height: 240px;
+}

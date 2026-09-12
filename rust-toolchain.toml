@@ -1,0 +1,6 @@
+# Toolchain epinglee : tout le monde compile avec exactement la meme chose.
+# MSVC est la seule cible officiellement supportee par Tauri sur Windows.
+[toolchain]
+channel = "stable-x86_64-pc-windows-msvc"
+components = ["rustfmt", "clippy", "rust-src", "rust-analyzer", "rust-docs"]
+profile = "default"

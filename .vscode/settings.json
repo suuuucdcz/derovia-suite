@@ -1,0 +1,38 @@
+{
+  // Rust
+  "rust-analyzer.check.command": "clippy",
+  "rust-analyzer.check.allTargets": true,
+  "rust-analyzer.cargo.features": "all",
+  "rust-analyzer.imports.granularity.group": "crate",
+  "rust-analyzer.imports.prefix": "crate",
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer",
+    "editor.formatOnSave": true
+  },
+
+  // Frontend
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "[typescript]": { "editor.formatOnSave": true },
+  "[css]": { "editor.formatOnSave": true },
+  "[json]": { "editor.formatOnSave": true },
+
+  // Le design system utilise abondamment les variables CSS ; sans cela
+  // l'editeur signale a tort les proprietes propres a WebKit.
+  "css.lint.unknownProperties": "ignore",
+  "css.lint.vendorPrefix": "ignore",
+
+  "files.exclude": {
+    "**/target": true,
+    "**/node_modules": true,
+    "**/dist": true
+  },
+  "search.exclude": {
+    "**/target": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/dev-fixtures.json": true
+  },
+  "files.eol": "\n",
+  "editor.rulers": [100]
+}

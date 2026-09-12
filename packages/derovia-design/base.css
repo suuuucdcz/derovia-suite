@@ -1,0 +1,163 @@
+/* ============================================================================
+   Derovia — socle
+   ----------------------------------------------------------------------------
+   Remise a zero du navigateur et reglages typographiques communs a la suite.
+   Ne contient aucun composant : uniquement ce qui s'applique a tout document.
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  letter-spacing: var(--tracking-normal);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Une application de bureau ne se selectionne pas au glisser comme une page web.
+   La selection reste autorisee la ou elle a un sens : les valeurs a recopier. */
+body {
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+.selectable,
+input,
+textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  line-height: 1.15;
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--text-2xl);
+}
+
+h2 {
+  font-size: var(--text-xl);
+}
+
+h3 {
+  font-size: var(--text-lg);
+  letter-spacing: var(--tracking-snug);
+}
+
+p {
+  text-wrap: pretty;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+svg {
+  display: block;
+}
+
+/* Une classe qui pose un display bat la regle [hidden] du navigateur. Sans ce
+   !important, masquer une vue construite en grille ne la masquerait pas. */
+[hidden] {
+  display: none !important;
+}
+
+/* Tout chiffre affiche dans la suite est en chasse fixe : les colonnes de
+   montants s'alignent et un nombre qui change ne fait plus sauter la mise en page. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* --- Focus ---------------------------------------------------------------
+   Visible au clavier, invisible a la souris : la bague ne doit pas polluer
+   l'interface de quelqu'un qui clique. */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+/* --- Barres de defilement -----------------------------------------------
+   Fines et discretes, dans l'esprit des barres superposees de macOS. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border: 3px solid transparent;
+  border-radius: var(--radius-full);
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-quaternary);
+  background-clip: content-box;
+}
+
+/* --- Accessibilite -------------------------------------------------------
+   Quand le systeme demande moins d'animation, on la supprime au lieu de la
+   reduire : une transition de 1 ms reste percue par qui y est sensible. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

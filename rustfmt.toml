@@ -1,0 +1,7 @@
+edition = "2024"
+max_width = 100
+use_small_heuristics = "Max"
+newline_style = "Unix"
+
+# imports_granularity et group_imports demandent nightly : ecartes pour rester
+# sur une toolchain stable et garder une sortie sans avertissement.

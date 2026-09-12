@@ -1,0 +1,198 @@
+/* ============================================================================
+   Derovia — jetons de design
+   ----------------------------------------------------------------------------
+   La source unique de verite visuelle de la suite. Aucun outil Derovia n'ecrit
+   une couleur, un rayon ou une duree en dur : tout passe par ces variables.
+   C'est ce qui fait que deux outils differents se ressemblent, et qu'un
+   changement de charte se propage partout d'un seul coup.
+
+   Chaque outil ne redefinit qu'une chose, sa couleur d'accent, via --accent.
+   ========================================================================== */
+
+:root {
+  color-scheme: light dark;
+
+  /* --- Typographie -------------------------------------------------------
+     SF Pro sur macOS, Segoe UI Variable sur Windows 11 : les deux polices
+     systeme ont la meme sobriete geometrique. Aucun telechargement, donc
+     aucun saut de rendu au premier affichage. */
+  --font-sans: "SF Pro Display", -apple-system, BlinkMacSystemFont,
+    "Segoe UI Variable Display", "Segoe UI", Inter, system-ui, sans-serif;
+  --font-text: "SF Pro Text", -apple-system, BlinkMacSystemFont,
+    "Segoe UI Variable Text", "Segoe UI", Inter, system-ui, sans-serif;
+  --font-mono: "SF Mono", "Cascadia Mono", "JetBrains Mono", ui-monospace, monospace;
+
+  /* Echelle typographique. Le crenage se resserre a mesure que le corps
+     grandit : c'est la signature des titres Apple. */
+  --text-2xs: 0.6875rem;   /* 11px — etiquettes de graphique */
+  --text-xs: 0.75rem;      /* 12px — legendes */
+  --text-sm: 0.8125rem;    /* 13px — libelles de champ */
+  --text-base: 0.9375rem;  /* 15px — corps */
+  --text-lg: 1.0625rem;    /* 17px — corps mis en avant */
+  --text-xl: 1.375rem;     /* 22px — titres de carte */
+  --text-2xl: 1.75rem;     /* 28px — titre de section */
+  --text-3xl: 2.5rem;      /* 40px — chiffre cle */
+  --text-4xl: 3.25rem;     /* 52px — verdict */
+
+  --tracking-tight: -0.022em;
+  --tracking-snug: -0.014em;
+  --tracking-normal: -0.006em;
+  --tracking-wide: 0.06em;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* --- Rythme ------------------------------------------------------------
+     Une echelle de 4 px. Tout espacement de la suite est un multiple. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* --- Rayons ------------------------------------------------------------
+     Genereux, mais jamais au point de faire jouet : le rayon croit avec la
+     surface, de sorte que la courbure percue reste constante. */
+  --radius-xs: 6px;
+  --radius-sm: 9px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-2xl: 30px;
+  --radius-full: 999px;
+
+  /* --- Couleurs, theme clair --------------------------------------------- */
+  --canvas: #fbfbfd;
+  --surface: #ffffff;
+  --surface-sunken: #f2f2f5;
+  --surface-hover: #f7f7f9;
+  --sidebar: rgba(246, 246, 248, 0.82);
+
+  --ink: #1d1d1f;
+  --ink-secondary: #4b4b50;
+  --ink-tertiary: #86868b;
+  --ink-quaternary: #b0b0b6;
+  --ink-inverse: #ffffff;
+
+  --line: rgba(0, 0, 0, 0.09);
+  --line-strong: rgba(0, 0, 0, 0.16);
+
+  /* Accent de la suite. Chaque outil peut le redefinir sur sa racine. */
+  --accent: #0071e3;
+  --accent-hover: #0077ed;
+  --accent-pressed: #0062c4;
+  --accent-soft: rgba(0, 113, 227, 0.1);
+  --accent-ink: #ffffff;
+
+  /* Couleurs semantiques. « Acheter » et « louer » gardent la meme teinte
+     partout dans l'outil : dans le graphique, la legende et les chiffres. */
+  --buy: #0071e3;
+  --buy-soft: rgba(0, 113, 227, 0.12);
+  --rent: #e07b00;
+  --rent-soft: rgba(224, 123, 0, 0.13);
+
+  --positive: #1d8a4a;
+  --positive-soft: rgba(29, 138, 74, 0.12);
+  --negative: #d1332c;
+  --negative-soft: rgba(209, 51, 44, 0.12);
+  --neutral: #6e6e73;
+  --neutral-soft: rgba(110, 110, 115, 0.12);
+
+  /* Couleurs de famille de fichier, pour les etiquettes de format. Elles sont
+     ici plutot qu'ecrites dans un outil : une teinte en dur ignorerait le
+     theme sombre, ou il faudrait la redefinir a chaque endroit. */
+  --tag-doc: #1d4ed8;
+  --tag-doc-soft: rgba(29, 78, 216, 0.12);
+  --tag-image: #047857;
+  --tag-image-soft: rgba(4, 120, 87, 0.12);
+  --tag-pdf: #b91c1c;
+  --tag-pdf-soft: rgba(185, 28, 28, 0.12);
+  --tag-markup: #b45309;
+  --tag-markup-soft: rgba(180, 83, 9, 0.12);
+  --tag-archive: #6d28d9;
+  --tag-archive-soft: rgba(109, 40, 217, 0.12);
+
+  /* --- Profondeur --------------------------------------------------------
+     Deux ombres superposees : une nette au ras de l'element pour le detacher,
+     une large et diffuse pour l'elevation. Une seule ombre parait toujours sale. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.05), 0 6px 20px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 2px 6px rgba(0, 0, 0, 0.06), 0 18px 48px rgba(0, 0, 0, 0.11);
+  --shadow-focus: 0 0 0 4px var(--accent-soft);
+
+  /* --- Mouvement ---------------------------------------------------------
+     Une seule courbe pour toute la suite, tres decelerante : le mouvement
+     demarre franchement puis s'installe, sans rebond. */
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 130ms;
+  --duration: 240ms;
+  --duration-slow: 420ms;
+
+  /* --- Structure --------------------------------------------------------- */
+  --sidebar-width: 264px;
+  --content-max: 1160px;
+}
+
+/* --- Theme sombre --------------------------------------------------------
+   Les surfaces s'eclaircissent avec l'elevation au lieu de projeter une ombre :
+   dans le noir, une ombre ne se voit pas, un ecart de luminosite si. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #131315;
+    --surface: #1d1d20;
+    --surface-sunken: #242428;
+    --surface-hover: #2a2a2f;
+    --sidebar: rgba(29, 29, 32, 0.78);
+
+    --ink: #f5f5f7;
+    --ink-secondary: #c4c4c8;
+    --ink-tertiary: #909096;
+    --ink-quaternary: #66666c;
+    --ink-inverse: #131315;
+
+    --line: rgba(255, 255, 255, 0.11);
+    --line-strong: rgba(255, 255, 255, 0.2);
+
+    --accent: #2e8fff;
+    --accent-hover: #4a9dff;
+    --accent-pressed: #1f7ae6;
+    --accent-soft: rgba(46, 143, 255, 0.18);
+
+    --buy: #2e8fff;
+    --buy-soft: rgba(46, 143, 255, 0.2);
+    --rent: #ff9f2e;
+    --rent-soft: rgba(255, 159, 46, 0.2);
+
+    --positive: #3ad46f;
+    --positive-soft: rgba(58, 212, 111, 0.18);
+    --negative: #ff5c52;
+    --negative-soft: rgba(255, 92, 82, 0.18);
+    --neutral: #98989e;
+    --neutral-soft: rgba(152, 152, 158, 0.18);
+
+    /* Dans le noir, les memes teintes doivent etre eclaircies pour rester
+       lisibles sur une surface sombre. */
+    --tag-doc: #7dabff;
+    --tag-doc-soft: rgba(125, 171, 255, 0.18);
+    --tag-image: #43c98d;
+    --tag-image-soft: rgba(67, 201, 141, 0.18);
+    --tag-pdf: #ff7a70;
+    --tag-pdf-soft: rgba(255, 122, 112, 0.18);
+    --tag-markup: #f0a94a;
+    --tag-markup-soft: rgba(240, 169, 74, 0.18);
+    --tag-archive: #b38bff;
+    --tag-archive-soft: rgba(179, 139, 255, 0.18);
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.55);
+  }
+}

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Derovia Arbitrage</title>
+  </head>
+  <body>
+    <!-- ═══ Écran de lancement ═══════════════════════════════════════════ -->
+    <div class="launcher" id="launcher">
+      <header class="launcher__topbar">
+        <button class="btn btn--ghost" type="button" data-auth="signin">Se connecter</button>
+        <button class="btn btn--primary" type="button" data-auth="signup">Créer un compte</button>
+      </header>
+
+      <div class="launcher__body">
+        <div class="launcher__hero">
+          <div class="launcher__mark" aria-hidden="true">D</div>
+          <h1 class="launcher__wordmark">Derovia</h1>
+          <p class="launcher__tagline">
+            Suite d'outils d'automatisation. Des décisions chiffrées, calculées
+            sur votre machine.
+          </p>
+        </div>
+
+        <div class="launcher__section-label">Outils</div>
+        <div class="tool-grid" id="tool-grid"></div>
+      </div>
+
+      <footer class="launcher__footer" id="launcher-footer"></footer>
+    </div>
+
+    <!-- ═══ Espace de travail ════════════════════════════════════════════ -->
+    <div class="app-shell" id="workspace" hidden>
+      <aside class="sidebar">
+        <button class="sidebar__brand" type="button" id="back-to-launcher"
+                title="Revenir à l'accueil de la suite">
+          <span class="sidebar__mark" aria-hidden="true">D</span>
+          <span class="sidebar__wordmark">Derovia</span>
+        </button>
+
+        <nav class="sidebar__section" id="sidebar-nav" aria-label="Outils de la suite">
+          <div class="sidebar__label">Outils</div>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="topbar__title">
+            <h1>Arbitrage</h1>
+            <p class="topbar__subtitle" id="app-subtitle">
+              Acheter ou louer, chiffres à l'appui
+            </p>
+          </div>
+          <div class="topbar__actions">
+            <button class="btn btn--secondary" type="button" id="action-reset">
+              Réinitialiser
+            </button>
+            <button class="btn btn--primary" type="button" id="action-copy">
+              Copier le résumé
+            </button>
+          </div>
+        </header>
+
+        <div class="scroll-area">
+          <div class="layout">
+            <div class="stack" id="form-column"></div>
+            <div class="stack" id="result-column"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- ═══ Fenêtre de compte ════════════════════════════════════════════ -->
+    <div class="modal" id="auth-modal" hidden>
+      <div class="modal__veil" data-close-modal></div>
+      <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+        <button class="modal__close" type="button" data-close-modal aria-label="Fermer">×</button>
+
+        <h2 class="modal__title" id="auth-title">Se connecter</h2>
+        <p class="modal__lede" id="auth-lede">
+          Retrouvez vos scénarios sur tous vos postes.
+        </p>
+
+        <div class="segmented" role="tablist" id="auth-switch">
+          <div class="segmented__thumb" id="auth-thumb"></div>
+          <button type="button" role="tab" data-mode="signin" aria-selected="true">
+            Se connecter
+          </button>
+          <button type="button" role="tab" data-mode="signup" aria-selected="false">
+            Créer un compte
+          </button>
+        </div>
+
+        <form class="auth-form" id="auth-form" style="margin-top: var(--space-5)">
+          <label class="field" id="auth-name-field" hidden>
+            <span class="field__label">Nom</span>
+            <span class="input">
+              <input type="text" name="nom" autocomplete="name" placeholder="Votre nom" />
+            </span>
+          </label>
+
+          <label class="field">
+            <span class="field__label">Adresse e-mail</span>
+            <span class="input">
+              <input type="email" name="email" id="auth-email" autocomplete="email" placeholder="vous@exemple.fr" required />
+            </span>
+          </label>
+
+          <label class="field">
+            <span class="field__label">Mot de passe</span>
+            <span class="input">
+              <input type="password" name="motdepasse" id="auth-password" autocomplete="current-password" placeholder="••••••••" required minlength="6" />
+            </span>
+          </label>
+
+          <p class="auth-form__note" id="auth-message" hidden></p>
+
+          <button class="btn btn--primary" type="submit" id="auth-submit">Continuer</button>
+
+          <p class="auth-form__small">
+            Vos fichiers ne quittent jamais cette machine&nbsp;: le compte ne sert
+            qu'à vous identifier.
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

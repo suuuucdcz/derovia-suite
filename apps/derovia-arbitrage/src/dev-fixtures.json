@@ -1,0 +1,419 @@
+{
+  "analyses": {
+    "immobilier": {
+      "indifferenceReturn": 4.291734765283764,
+      "verdict": {
+        "breakEvenYear": null,
+        "buy": {
+          "assetValue": 364824.09509596165,
+          "interestPaid": 74565.664927839,
+          "monthlyEffortFirstYear": 2055.8936554753627,
+          "netWorth": 209989.66882516604,
+          "portfolio": 0.0,
+          "remainingDebt": 154834.4262707956,
+          "taxSaved": 0.0,
+          "totalOutflow": 311835.7320556281
+        },
+        "horizonYears": 10,
+        "netAdvantage": -10741.648342012923,
+        "recommendation": "rent",
+        "rent": {
+          "assetValue": 0.0,
+          "interestPaid": 0.0,
+          "monthlyEffortFirstYear": 1180.0,
+          "netWorth": 220731.31716717896,
+          "portfolio": 219631.31716717896,
+          "remainingDebt": 0.0,
+          "taxSaved": 0.0,
+          "totalOutflow": 156148.04935628828
+        },
+        "timeline": [
+          {
+            "assetValue": 285000.0,
+            "buyCumulativeCost": 60000.0,
+            "buyNetWorth": 21000.0,
+            "remainingDebt": 264000.0,
+            "rentCumulativeCost": 1100.0,
+            "rentNetWorth": 58900.0,
+            "year": 0
+          },
+          {
+            "assetValue": 292125.0,
+            "buyCumulativeCost": 84670.72386570432,
+            "buyNetWorth": 37406.06819374929,
+            "remainingDebt": 254718.9318062507,
+            "rentCumulativeCost": 15260.0,
+            "rentNetWorth": 72539.47279450379,
+            "year": 1
+          },
+          {
+            "assetValue": 299428.125,
+            "buyCumulativeCost": 109449.44773140864,
+            "buyNetWorth": 54320.36070323404,
+            "remainingDebt": 245107.76429676596,
+            "rentCumulativeCost": 29703.199999999983,
+            "rentNetWorth": 86681.73959680067,
+            "year": 2
+          },
+          {
+            "assetValue": 306913.8281249999,
+            "buyCumulativeCost": 134338.33159711305,
+            "buyNetWorth": 71759.07128028438,
+            "remainingDebt": 235154.7568447155,
+            "rentCumulativeCost": 44435.26399999997,
+            "rentNetWorth": 101348.35651464162,
+            "year": 3
+          },
+          {
+            "assetValue": 314586.6738281249,
+            "buyCumulativeCost": 159339.57866281725,
+            "buyNetWorth": 89738.92258317777,
+            "remainingDebt": 224847.7512449471,
+            "rentCumulativeCost": 59461.96927999999,
+            "rentNetWorth": 116561.88578931248,
+            "year": 4
+          },
+          {
+            "assetValue": 322451.3406738279,
+            "buyCumulativeCost": 184455.4361925217,
+            "buyNetWorth": 108277.18381183001,
+            "remainingDebt": 214174.1568619979,
+            "rentCumulativeCost": 74789.20866560005,
+            "rentNetWorth": 132345.94466887348,
+            "year": 5
+          },
+          {
+            "assetValue": 330512.62419067364,
+            "buyCumulativeCost": 209688.19639550603,
+            "buyNetWorth": 127391.68894080768,
+            "remainingDebt": 203120.93524986596,
+            "rentCumulativeCost": 90422.99283891212,
+            "rentNetWorth": 148725.25669639223,
+            "year": 6
+          },
+          {
+            "assetValue": 338775.4397954405,
+            "buyCumulativeCost": 235040.19732523605,
+            "buyNetWorth": 147100.8555706866,
+            "remainingDebt": 191674.58422475393,
+            "rentCumulativeCost": 106369.45269569044,
+            "rentNetWorth": 165725.7055333462,
+            "year": 7
+          },
+          {
+            "assetValue": 347244.8257903264,
+            "buyCumulativeCost": 260513.82379624655,
+            "buyNetWorth": 167423.70441899775,
+            "remainingDebt": 179821.12137132866,
+            "rentCumulativeCost": 122634.84174960433,
+            "rentNetWorth": 183374.39144436843,
+            "year": 8
+          },
+          {
+            "assetValue": 355925.9464350846,
+            "buyCumulativeCost": 286111.50831936335,
+            "buyNetWorth": 188379.87947273577,
+            "remainingDebt": 167546.06696234885,
+            "rentCumulativeCost": 139225.53858459648,
+            "rentNetWorth": 201699.6905758067,
+            "year": 9
+          },
+          {
+            "assetValue": 364824.09509596165,
+            "buyCumulativeCost": 311835.7320556281,
+            "buyNetWorth": 209989.66882516604,
+            "remainingDebt": 154834.4262707956,
+            "rentCumulativeCost": 156148.04935628828,
+            "rentNetWorth": 220731.31716717896,
+            "year": 10
+          }
+        ]
+      }
+    },
+    "materiel": {
+      "indifferenceReturn": 10.482223662547769,
+      "verdict": {
+        "breakEvenYear": 5,
+        "buy": {
+          "assetValue": 15564.800000000003,
+          "interestPaid": 4624.665025148854,
+          "monthlyEffortFirstYear": 650.1520641086839,
+          "netWorth": 16860.59053563948,
+          "portfolio": 1295.7905356394774,
+          "remainingDebt": 0.0,
+          "taxSaved": 17086.729860287218,
+          "totalOutflow": 52260.1895808616
+        },
+        "horizonYears": 5,
+        "netAdvantage": 2970.7895488756767,
+        "recommendation": "buy",
+        "rent": {
+          "assetValue": 0.0,
+          "interestPaid": 0.0,
+          "monthlyEffortFirstYear": 687.5,
+          "netWorth": 13889.800986763803,
+          "portfolio": 13889.800986763803,
+          "remainingDebt": 0.0,
+          "taxSaved": 13749.999999999989,
+          "totalOutflow": 42916.66666666667
+        },
+        "timeline": [
+          {
+            "assetValue": 47500.0,
+            "buyCumulativeCost": 12000.0,
+            "buyNetWorth": 8500.0,
+            "remainingDebt": 39000.0,
+            "rentCumulativeCost": 1666.6666666666667,
+            "rentNetWorth": 10333.333333333334,
+            "year": 0
+          },
+          {
+            "assetValue": 38000.0,
+            "buyCumulativeCost": 19801.8247693042,
+            "buyNetWorth": 6576.266161257376,
+            "remainingDebt": 31884.499937873024,
+            "rentCumulativeCost": 9916.666666666668,
+            "rentNetWorth": 10953.333333333336,
+            "year": 1
+          },
+          {
+            "assetValue": 30400.000000000007,
+            "buyCumulativeCost": 27724.370745591015,
+            "buyNetWorth": 6783.075180241984,
+            "remainingDebt": 24442.115047815627,
+            "rentCumulativeCost": 18166.666666666668,
+            "rentNetWorth": 11610.533333333335,
+            "year": 2
+          },
+          {
+            "assetValue": 24320.000000000007,
+            "buyCumulativeCost": 35772.17218681132,
+            "buyNetWorth": 8745.00676741403,
+            "remainingDebt": 16657.828298024262,
+            "rentCumulativeCost": 26416.666666666668,
+            "rentNetWorth": 12307.165333333334,
+            "year": 3
+          },
+          {
+            "assetValue": 19456.000000000004,
+            "buyCumulativeCost": 43949.95142086942,
+            "buyNetWorth": 12162.511124664985,
+            "remainingDebt": 8515.932776881697,
+            "rentCumulativeCost": 34666.66666666667,
+            "rentNetWorth": 13045.595253333333,
+            "year": 4
+          },
+          {
+            "assetValue": 15564.800000000003,
+            "buyCumulativeCost": 52260.1895808616,
+            "buyNetWorth": 16860.59053563948,
+            "remainingDebt": 0.0,
+            "rentCumulativeCost": 42916.66666666667,
+            "rentNetWorth": 13889.800986763803,
+            "year": 5
+          }
+        ]
+      }
+    },
+    "vehicule": {
+      "indifferenceReturn": null,
+      "verdict": {
+        "breakEvenYear": null,
+        "buy": {
+          "assetValue": 14480.963796991999,
+          "interestPaid": 4433.2163148155205,
+          "monthlyEffortFirstYear": 732.6952719135853,
+          "netWorth": 14480.96379699161,
+          "portfolio": 0.0,
+          "remainingDebt": 3.886952981702052e-10,
+          "taxSaved": 0.0,
+          "totalOutflow": 49318.82926548184
+        },
+        "horizonYears": 5,
+        "netAdvantage": -1881.4823309718722,
+        "recommendation": "rent",
+        "rent": {
+          "assetValue": 0.0,
+          "interestPaid": 0.0,
+          "monthlyEffortFirstYear": 525.0,
+          "netWorth": 16362.446127963482,
+          "portfolio": 16362.446127963482,
+          "remainingDebt": 0.0,
+          "taxSaved": 0.0,
+          "totalOutflow": 34683.636143999975
+        },
+        "timeline": [
+          {
+            "assetValue": 27440.0,
+            "buyCumulativeCost": 5000.0,
+            "buyNetWorth": -2910.0,
+            "remainingDebt": 30350.0,
+            "rentCumulativeCost": 3000.0,
+            "rentNetWorth": 2000.0,
+            "year": 0
+          },
+          {
+            "assetValue": 24147.2,
+            "buyCumulativeCost": 13792.34326296303,
+            "buyNetWorth": -780.062891261121,
+            "remainingDebt": 24927.26289126112,
+            "rentCumulativeCost": 9300.0,
+            "rentNetWorth": 4617.712655635489,
+            "year": 1
+          },
+          {
+            "assetValue": 21249.536,
+            "buyCumulativeCost": 22620.186525926063,
+            "buyNetWorth": 2050.8952152149614,
+            "remainingDebt": 19198.64078478504,
+            "rentCumulativeCost": 15618.0,
+            "rentNetWorth": 7357.952378901468,
+            "year": 2
+          },
+          {
+            "assetValue": 18699.59168,
+            "buyCumulativeCost": 31484.23978888908,
+            "buyNetWorth": 5552.71231767465,
+            "remainingDebt": 13146.879362325351,
+            "rentCumulativeCost": 21954.35999999999,
+            "rentNetWorth": 10225.976623731263,
+            "year": 3
+          },
+          {
+            "assetValue": 16455.6406784,
+            "buyCumulativeCost": 40385.22725185211,
+            "buyNetWorth": 9701.889651939007,
+            "remainingDebt": 6753.751026460992,
+            "rentCumulativeCost": 28309.447199999984,
+            "rentNetWorth": 13227.260269640086,
+            "year": 4
+          },
+          {
+            "assetValue": 14480.963796991999,
+            "buyCumulativeCost": 49318.82926548184,
+            "buyNetWorth": 14480.96379699161,
+            "remainingDebt": 3.886952981702052e-10,
+            "rentCumulativeCost": 34683.636143999975,
+            "rentNetWorth": 16362.446127963482,
+            "year": 5
+          }
+        ]
+      }
+    }
+  },
+  "catalogue": [
+    {
+      "buyLabel": "Acheter",
+      "id": "immobilier",
+      "rentLabel": "Louer",
+      "scenario": {
+        "buy": {
+          "acquisitionFees": 0.08,
+          "downPayment": 60000.0,
+          "firstYearDrop": 0.0,
+          "loanInsurance": 0.0034000000000000002,
+          "loanRate": 0.035,
+          "loanYears": 20,
+          "maintenance": 0.01,
+          "price": 300000.0,
+          "resaleFees": 0.05,
+          "valueChange": 0.025,
+          "yearlyCharges": 2400.0
+        },
+        "horizonYears": 10,
+        "market": {
+          "inflation": 0.02,
+          "investmentReturn": 0.05
+        },
+        "rent": {
+          "buyoutOption": null,
+          "deposit": 1100.0,
+          "entryFees": 1100.0,
+          "monthlyCharges": 80.0,
+          "monthlyRent": 1100.0,
+          "rentIndexation": 0.02
+        },
+        "tax": null
+      },
+      "subtitle": "Acheter sa résidence principale ou rester locataire",
+      "title": "Logement"
+    },
+    {
+      "buyLabel": "Acheter",
+      "id": "vehicule",
+      "rentLabel": "LOA / LLD",
+      "scenario": {
+        "buy": {
+          "acquisitionFees": 0.01,
+          "downPayment": 5000.0,
+          "firstYearDrop": 0.2,
+          "loanInsurance": 0.002,
+          "loanRate": 0.055,
+          "loanYears": 5,
+          "maintenance": 0.025,
+          "price": 35000.0,
+          "resaleFees": 0.02,
+          "valueChange": -0.12,
+          "yearlyCharges": 900.0
+        },
+        "horizonYears": 5,
+        "market": {
+          "inflation": 0.02,
+          "investmentReturn": 0.04
+        },
+        "rent": {
+          "buyoutOption": null,
+          "deposit": 0.0,
+          "entryFees": 3000.0,
+          "monthlyCharges": 75.0,
+          "monthlyRent": 450.0,
+          "rentIndexation": 0.0
+        },
+        "tax": null
+      },
+      "subtitle": "Acheter à crédit ou passer en location longue durée",
+      "title": "Véhicule"
+    },
+    {
+      "buyLabel": "Investir",
+      "id": "materiel",
+      "rentLabel": "Leasing",
+      "scenario": {
+        "buy": {
+          "acquisitionFees": 0.02,
+          "downPayment": 12000.0,
+          "firstYearDrop": 0.0,
+          "loanInsurance": 0.001,
+          "loanRate": 0.045,
+          "loanYears": 5,
+          "maintenance": 0.04,
+          "price": 60000.0,
+          "resaleFees": 0.05,
+          "valueChange": -0.2,
+          "yearlyCharges": 600.0
+        },
+        "horizonYears": 5,
+        "market": {
+          "inflation": 0.02,
+          "investmentReturn": 0.06
+        },
+        "rent": {
+          "buyoutOption": null,
+          "deposit": 0.0,
+          "entryFees": 2000.0,
+          "monthlyCharges": 0.0,
+          "monthlyRent": 1100.0,
+          "rentIndexation": 0.0
+        },
+        "tax": {
+          "depreciationYears": 5,
+          "profitTax": 0.25,
+          "vatRate": 0.2,
+          "vatRecoverable": true
+        }
+      },
+      "subtitle": "Investir dans l'outil ou le prendre en leasing",
+      "title": "Matériel pro"
+    }
+  ]
+}

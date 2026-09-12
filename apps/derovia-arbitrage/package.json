@@ -1,0 +1,25 @@
+{
+  "name": "@derovia/arbitrage",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Derovia Arbitrage — acheter ou louer, chiffres a l'appui",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "check": "tsc --noEmit",
+    "tauri": "tauri",
+    "app": "tauri dev",
+    "app:build": "tauri build"
+  },
+  "dependencies": {
+    "@derovia/design": "*",
+    "@supabase/supabase-js": "^2.116.0",
+    "@tauri-apps/api": "^2"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2",
+    "typescript": "^5",
+    "vite": "^7"
+  }
+}

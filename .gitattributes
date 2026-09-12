@@ -1,0 +1,12 @@
+# Le depot est en LF de bout en bout : rustfmt, VS Code et les scripts le
+# supposent. Sans cette regle, Git convertit en CRLF a la sortie sous Windows
+# et chaque fichier touche apparait modifie en entier.
+* text=auto eol=lf
+
+# Les scripts PowerShell restent en CRLF : c'est ce qu'attend l'hote Windows.
+*.ps1 text eol=crlf
+
+# Binaires : aucune conversion.
+*.png binary
+*.ico binary
+*.icns binary

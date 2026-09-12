@@ -1,0 +1,23 @@
+[package]
+name = "derovia-compress"
+description = "Moteur de compression universel (images, PDF, archives) de la suite Derovia"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+derovia-core = { workspace = true }
+serde = { workspace = true }
+image = { workspace = true }
+lopdf = { workspace = true }
+zip = { workspace = true }
+
+[dev-dependencies]
+# Sert a verifier le contrat entre l'interface et le moteur.
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

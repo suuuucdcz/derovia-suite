@@ -1,0 +1,17 @@
+{
+  "name": "@derovia/design",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Design system partage de la suite Derovia",
+  "type": "module",
+  "main": "index.css",
+  "exports": {
+    ".": "./index.css",
+    "./index.css": "./index.css",
+    "./tokens.css": "./tokens.css",
+    "./base.css": "./base.css",
+    "./components.css": "./components.css",
+    "./launcher.css": "./launcher.css"
+  },
+  "files": ["index.css", "tokens.css", "base.css", "components.css", "launcher.css"]
+}
