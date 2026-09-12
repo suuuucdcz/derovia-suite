@@ -23,7 +23,7 @@ modifier lors d'une mise à jour.
 
 - **Windows 10 ou 11, 64 bits**
 - **Installeur de 2,9 Mo**
-- Version actuelle : **0.2.0**
+- Version actuelle : **0.2.1**
 - Gratuit
 - Se met à jour tout seul
 

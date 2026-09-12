@@ -99,6 +99,10 @@ jobs:
           releaseDraft: false
           prerelease: false
           includeUpdaterJson: true
+          # Le manifeste doit annoncer l'installeur que le site distribue. Un
+          # .msi applique par-dessus une installation .exe ne la remplace pas :
+          # il en cree une seconde, ailleurs, et le raccourci lance l'ancienne.
+          updaterJsonPreferNsis: true
 
       # Une release sans signature passerait inapercue jusqu'au jour ou
       # quelqu'un cliquerait « Installer » et se heurterait a un refus. On le
