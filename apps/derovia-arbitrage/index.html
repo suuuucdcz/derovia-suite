@@ -129,6 +129,34 @@
       </div>
     </div>
 
+    <!-- ═══ Scénarios enregistrés ════════════════════════════════════════ -->
+    <div class="modal" id="scenarios-modal" hidden>
+      <div class="modal__veil" data-close-scenarios></div>
+      <div class="modal__card modal__card--wide" role="dialog" aria-modal="true"
+           aria-labelledby="scenarios-title">
+        <button class="modal__close" type="button" data-close-scenarios aria-label="Fermer">×</button>
+
+        <h2 class="modal__title" id="scenarios-title">Mes scénarios</h2>
+        <p class="modal__lede">
+          Enregistrez un arbitrage pour le retrouver depuis n'importe quel poste.
+        </p>
+
+        <form class="scenario-save" id="scenario-save">
+          <label class="field">
+            <span class="field__label">Nom du scénario</span>
+            <span class="input">
+              <input type="text" id="scenario-nom" maxlength="80" placeholder="Appartement Lyon 3e" />
+            </span>
+          </label>
+          <button class="btn btn--primary" type="submit" id="scenario-enregistrer">Enregistrer</button>
+        </form>
+
+        <p class="auth-form__note" id="scenarios-message" hidden></p>
+
+        <div class="scenario-list" id="scenarios-liste"></div>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

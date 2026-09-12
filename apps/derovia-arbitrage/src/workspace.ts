@@ -11,7 +11,14 @@
  */
 
 import { analyser, catalogue } from "./api";
+import { compteActuel } from "./auth";
 import { escapeHtml, setWorkspaceChrome } from "./dom";
+import {
+  enregistrerScenario,
+  listerScenarios,
+  supprimerScenario,
+  type ScenarioEnregistre,
+} from "./scenarios";
 import { renderTimelineChart } from "./chart";
 import { formatEur, formatEurPrecise, formatPercent, formatSignedEur, formatYears } from "./format";
 import type { Analysis, Arbitrage, PresetCard } from "./types";
@@ -499,6 +506,9 @@ function wire(): void {
   document.querySelector("#action-copy")?.addEventListener("click", () => {
     void copySummary();
   });
+  document.querySelector("#action-scenarios")?.addEventListener("click", () => {
+    void ouvrirScenarios();
+  });
 }
 
 async function copySummary(): Promise<void> {
@@ -544,6 +554,7 @@ export async function startWorkspace(): Promise<void> {
     title: "Arbitrage",
     subtitle: "Acheter ou louer, chiffres à l'appui",
     actions: `
+      <button class="btn btn--secondary" type="button" id="action-scenarios">Mes scénarios</button>
       <button class="btn btn--secondary" type="button" id="action-reset">Réinitialiser</button>
       <button class="btn btn--primary" type="button" id="action-copy">Copier le résumé</button>`,
   });
@@ -581,4 +592,187 @@ export async function startWorkspace(): Promise<void> {
   }
 
   selectPreset(currentPreset.id);
+}
+
+
+// --- Scenarios enregistres ---------------------------------------------------
+
+/** Affiche un message dans la fenetre des scenarios. */
+function messageScenarios(texte: string, ton: "negative" | "positive"): void {
+  const zone = document.querySelector<HTMLElement>("#scenarios-message");
+  if (!zone) return;
+  zone.textContent = texte;
+  zone.dataset["tone"] = ton;
+  zone.hidden = false;
+}
+
+/** Efface le message de la fenetre des scenarios. */
+function effacerMessageScenarios(): void {
+  const zone = document.querySelector<HTMLElement>("#scenarios-message");
+  if (!zone) return;
+  zone.hidden = true;
+  zone.textContent = "";
+}
+
+/** Dessine la liste des scenarios enregistres. */
+function rendreListeScenarios(liste: ScenarioEnregistre[]): void {
+  const conteneur = document.querySelector<HTMLElement>("#scenarios-liste");
+  if (!conteneur) return;
+
+  if (liste.length === 0) {
+    conteneur.innerHTML =
+      '<p class="scenario-list__vide">Aucun scénario enregistré pour l\'instant.</p>';
+    return;
+  }
+
+  conteneur.innerHTML = liste
+    .map((enregistre) => {
+      const date = new Date(enregistre.modifieLe).toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+      const horizon = formatYears(enregistre.hypotheses.horizonYears);
+      return [
+        '<div class="scenario-item">',
+        '  <div class="scenario-item__texte">',
+        `    <div class="scenario-item__nom">${escapeHtml(enregistre.nom)}</div>`,
+        '    <div class="scenario-item__detail">',
+        `      ${escapeHtml(enregistre.preset)} · ${escapeHtml(horizon)} · ${escapeHtml(date)}`,
+        "    </div>",
+        "  </div>",
+        `  <button class="btn btn--secondary btn--sm" type="button" data-charger="${escapeHtml(enregistre.id)}">Ouvrir</button>`,
+        `  <button class="file-item__remove" type="button" data-supprimer="${escapeHtml(enregistre.id)}" title="Supprimer">✕</button>`,
+        "</div>",
+      ].join("\n");
+    })
+    .join("");
+
+  for (const bouton of conteneur.querySelectorAll<HTMLElement>("[data-charger]")) {
+    bouton.addEventListener("click", () => {
+      const cible = liste.find((candidat) => candidat.id === bouton.dataset["charger"]);
+      if (cible) chargerScenario(cible);
+    });
+  }
+
+  for (const bouton of conteneur.querySelectorAll<HTMLElement>("[data-supprimer]")) {
+    bouton.addEventListener("click", () => {
+      const id = bouton.dataset["supprimer"];
+      if (id) void retirerScenario(id);
+    });
+  }
+}
+
+/** Reprend un scenario enregistre dans l'outil. */
+function chargerScenario(enregistre: ScenarioEnregistre): void {
+  const preset = presets.find((candidat) => candidat.id === enregistre.preset);
+  if (preset) active = preset;
+  scenario = structuredClone(enregistre.hypotheses);
+
+  if (subtitle && active) subtitle.textContent = active.subtitle;
+  renderForm();
+  void recompute();
+  fermerScenarios();
+}
+
+/** Supprime un scenario, puis rafraichit la liste. */
+async function retirerScenario(id: string): Promise<void> {
+  try {
+    await supprimerScenario(id);
+    rendreListeScenarios(await listerScenarios());
+    effacerMessageScenarios();
+  } catch (erreur: unknown) {
+    messageScenarios(erreur instanceof Error ? erreur.message : String(erreur), "negative");
+  }
+}
+
+/** Ferme la fenetre des scenarios. */
+function fermerScenarios(): void {
+  const fenetre = document.querySelector<HTMLElement>("#scenarios-modal");
+  if (fenetre) fenetre.hidden = true;
+}
+
+/** Vrai une fois les ecouteurs de la fenetre branches. */
+let scenariosBranches = false;
+
+/**
+ * Ouvre la fenetre des scenarios.
+ *
+ * Sans compte connecte, elle explique pourquoi plutot que d'afficher une liste
+ * vide qui laisserait croire a une perte de donnees.
+ */
+async function ouvrirScenarios(): Promise<void> {
+  const fenetre = document.querySelector<HTMLElement>("#scenarios-modal");
+  if (!fenetre) return;
+
+  if (!scenariosBranches) {
+    scenariosBranches = true;
+    for (const cible of document.querySelectorAll<HTMLElement>("[data-close-scenarios]")) {
+      cible.addEventListener("click", fermerScenarios);
+    }
+    document.addEventListener("keydown", (evenement) => {
+      if (evenement.key === "Escape" && !fenetre.hidden) fermerScenarios();
+    });
+    document
+      .querySelector<HTMLFormElement>("#scenario-save")
+      ?.addEventListener("submit", (evenement) => {
+        evenement.preventDefault();
+        void sauvegarderScenarioCourant();
+      });
+  }
+
+  fenetre.hidden = false;
+  effacerMessageScenarios();
+
+  const champ = document.querySelector<HTMLInputElement>("#scenario-nom");
+  if (champ && active && scenario) {
+    champ.value = `${active.title} — ${formatYears(scenario.horizonYears)}`;
+  }
+
+  const compte = await compteActuel();
+  if (!compte) {
+    rendreListeScenarios([]);
+    messageScenarios(
+      "Connectez-vous pour enregistrer vos scénarios et les retrouver sur vos autres postes.",
+      "negative",
+    );
+    return;
+  }
+
+  try {
+    rendreListeScenarios(await listerScenarios());
+  } catch (erreur: unknown) {
+    messageScenarios(erreur instanceof Error ? erreur.message : String(erreur), "negative");
+  }
+}
+
+/** Enregistre les hypotheses actuelles sous le nom saisi. */
+async function sauvegarderScenarioCourant(): Promise<void> {
+  const bouton = document.querySelector<HTMLButtonElement>("#scenario-enregistrer");
+  const champ = document.querySelector<HTMLInputElement>("#scenario-nom");
+  const nom = champ?.value.trim();
+
+  if (!scenario || !active) return;
+  if (!nom) {
+    messageScenarios("Donnez un nom à ce scénario.", "negative");
+    return;
+  }
+
+  if (bouton) {
+    bouton.disabled = true;
+    bouton.textContent = "Enregistrement…";
+  }
+
+  try {
+    await enregistrerScenario(nom, active.id, scenario);
+    messageScenarios(`« ${nom} » est enregistré.`, "positive");
+    rendreListeScenarios(await listerScenarios());
+  } catch (erreur: unknown) {
+    messageScenarios(erreur instanceof Error ? erreur.message : String(erreur), "negative");
+  } finally {
+    if (bouton) {
+      bouton.disabled = false;
+      bouton.textContent = "Enregistrer";
+    }
+  }
 }

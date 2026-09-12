@@ -1313,3 +1313,74 @@
   line-height: 1.5;
   text-align: center;
 }
+
+/* --- Scenarios enregistres ------------------------------------------------
+   La fenetre qui enregistre un arbitrage et liste ceux deja conserves. */
+
+.modal__card--wide {
+  max-width: 560px;
+}
+
+.scenario-save {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.scenario-save .field {
+  flex: 1;
+}
+
+.scenario-save .btn {
+  flex: none;
+  height: 40px;
+}
+
+.scenario-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.scenario-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  transition: border-color var(--duration-fast) var(--ease);
+}
+
+.scenario-item:hover {
+  border-color: var(--accent);
+}
+
+.scenario-item__texte {
+  flex: 1;
+  min-width: 0;
+}
+
+.scenario-item__nom {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scenario-item__detail {
+  color: var(--ink-tertiary);
+  font-size: var(--text-xs);
+}
+
+.scenario-list__vide {
+  padding: var(--space-6) 0;
+  color: var(--ink-tertiary);
+  font-size: var(--text-sm);
+  text-align: center;
+}

@@ -32,6 +32,16 @@ const client: SupabaseClient | null =
       })
     : null;
 
+/**
+ * Le client Supabase, pour les modules qui lisent ou ecrivent des donnees.
+ *
+ * `null` quand la configuration manque : l'appelant doit alors se passer du
+ * serveur plutot que d'echouer.
+ */
+export function supabase(): SupabaseClient | null {
+  return client;
+}
+
 /** Ce que l'interface a besoin de savoir d'un compte connecte. */
 export interface Compte {
   /** L'identifiant Supabase de l'utilisateur. */
@@ -76,8 +86,23 @@ function messageLisible(message: string): string {
     "Unable to validate email address: invalid format": "Cette adresse e-mail n'est pas valide.",
     "Signups not allowed for this instance":
       "Les inscriptions sont désactivées sur ce projet.",
+    "For security purposes, you can only request this after 60 seconds.":
+      "Trop de tentatives. Patientez une minute avant de réessayer.",
   };
-  return connus[message] ?? message;
+  if (connus[message]) return connus[message];
+
+  // Certains messages portent l'adresse saisie et ne peuvent donc pas figurer
+  // dans un dictionnaire : ils se reconnaissent a leur forme.
+  if (/Email address .* is invalid/i.test(message)) {
+    return "Cette adresse e-mail est refusée. Utilisez une adresse réelle : le serveur vérifie que le domaine existe.";
+  }
+  if (/rate limit|too many requests/i.test(message)) {
+    return "Trop de tentatives en peu de temps. Réessayez dans quelques instants.";
+  }
+
+  // Un message inconnu passe tel quel : mieux vaut un texte en anglais qu'un
+  // « une erreur est survenue » qui n'apprend rien.
+  return message;
 }
 
 /** Le compte actuellement connecte, s'il y en a un. */
