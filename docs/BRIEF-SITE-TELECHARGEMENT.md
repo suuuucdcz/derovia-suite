@@ -2,7 +2,7 @@
 
 > Document à transmettre tel quel à l'IA qui développe le site.
 > Tout ce qui suit a été vérifié sur les fichiers réellement en ligne.
-> Dernière vérification : 12 septembre 2026, version 0.2.2.
+> Dernière vérification : 12 septembre 2026, version 0.3.0.
 
 ---
 
@@ -32,8 +32,9 @@ par GitHub.
 
 - **Windows 10 ou 11, 64 bits**
 - **Installeur de 2,9 Mo**
-- Version actuelle : **0.2.2**
+- Version actuelle : **0.3.0**
 - Gratuit
+- **Compte gratuit requis** (e-mail et mot de passe, aucune carte)
 - Se met à jour automatiquement
 
 ## 4. ⚠️ L'avertissement Windows — le point décisif
@@ -84,6 +85,24 @@ Trois outils dans une seule application :
 
 Trois autres sont annoncés dans l'application comme *Bientôt* : Prévision,
 Devis, Veille. **Ne pas les présenter comme disponibles.**
+
+## 5 bis. Le compte
+
+Depuis la version 0.3.0, Derovia demande de créer un compte au premier
+lancement : une adresse e-mail et un mot de passe, sans carte bancaire et sans
+validation par e-mail. Le compte sert à retrouver ses scénarios enregistrés d'un
+poste à l'autre.
+
+**Le dire sur la page, près du bouton.** Un visiteur qui télécharge en croyant
+l'outil ouvert et tombe sur un formulaire se sent piégé — alors que la même
+demande, annoncée avant le téléchargement, ne pose aucun problème.
+
+Formulation possible : « Un compte gratuit est demandé au premier lancement,
+pour retrouver vos scénarios sur tous vos postes. »
+
+Ce qui reste vrai et mérite d'être répété à cet endroit : **les fichiers traités
+ne quittent jamais la machine.** Le compte ne sert qu'à identifier, pas à
+transporter les documents.
 
 ## 6. Le premier lancement
 
@@ -157,7 +176,7 @@ de compte à rebours ni de « offre limitée ».
 | Lien de téléchargement | `https://github.com/suuuucdcz/derovia-suite/releases/latest/download/Derovia-setup.exe` |
 | Nom du fichier téléchargé | `Derovia-setup.exe` |
 | Poids de l'installeur | 2 896 651 octets, soit 2,9 Mo |
-| Version actuelle | 0.2.2 |
+| Version actuelle | 0.3.0 |
 | Systèmes | Windows 10 et 11, 64 bits |
 | Prix | gratuit |
 | Signature numérique | aucune — avertissement SmartScreen au premier lancement |
