@@ -44,6 +44,19 @@ jobs:
             exit 1
           fi
 
+      # Le fichier .env n'est pas dans le depot : sans ces variables, la
+      # compilation reussit et produit une application ou la creation de compte
+      # n'existe tout simplement pas — les boutons disparaissent, sans erreur.
+      - name: La configuration des comptes est en place
+        shell: bash
+        run: |
+          if [ -z "${{ vars.VITE_SUPABASE_URL }}" ] || [ -z "${{ vars.VITE_SUPABASE_ANON_KEY }}" ]; then
+            echo "Les variables VITE_SUPABASE_URL et VITE_SUPABASE_ANON_KEY sont absentes."
+            echo "Settings > Secrets and variables > Actions > Variables."
+            echo "Sans elles, l'application publiee n'aurait aucun compte."
+            exit 1
+          fi
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -92,6 +105,12 @@ jobs:
           # installees, sans aucun message d'erreur cote serveur.
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          # Vite fige ces valeurs dans le bundle au moment de la compilation.
+          # La cle anon est publique par conception : elle voyage dans chaque
+          # binaire distribue, et ce sont les regles RLS qui protegent les
+          # donnees. La cle service_role, elle, n'approche jamais un client.
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
         with:
           projectPath: apps/derovia-arbitrage
           tagName: ${{ steps.etiquette.outputs.tag }}

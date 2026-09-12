@@ -2,7 +2,7 @@
 
 > Document à transmettre tel quel à l'IA qui développe le site.
 > Tout ce qui suit a été vérifié sur les fichiers réellement en ligne.
-> Dernière vérification : 12 septembre 2026, version 0.2.1.
+> Dernière vérification : 12 septembre 2026, version 0.2.2.
 
 ---
 
@@ -32,7 +32,7 @@ par GitHub.
 
 - **Windows 10 ou 11, 64 bits**
 - **Installeur de 2,9 Mo**
-- Version actuelle : **0.2.1**
+- Version actuelle : **0.2.2**
 - Gratuit
 - Se met à jour automatiquement
 
@@ -157,7 +157,7 @@ de compte à rebours ni de « offre limitée ».
 | Lien de téléchargement | `https://github.com/suuuucdcz/derovia-suite/releases/latest/download/Derovia-setup.exe` |
 | Nom du fichier téléchargé | `Derovia-setup.exe` |
 | Poids de l'installeur | 2 896 651 octets, soit 2,9 Mo |
-| Version actuelle | 0.2.1 |
+| Version actuelle | 0.2.2 |
 | Systèmes | Windows 10 et 11, 64 bits |
 | Prix | gratuit |
 | Signature numérique | aucune — avertissement SmartScreen au premier lancement |

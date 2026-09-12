@@ -216,7 +216,14 @@ pub fn install(
         ArchiveKind::MsiAdministrative => "msi",
     };
     let archive = dossier.join(format!("telechargement.{extension}"));
-    telecharger(spec.url, &archive, spec.download_bytes, &mut progress)?;
+
+    // Une coupure de reseau — ou la fermeture de l'application — laisse sinon
+    // un telechargement partiel de plusieurs dizaines de megaoctets sur le
+    // disque, qui n'est utile a personne et que rien ne viendrait reclamer.
+    if let Err(erreur) = telecharger(spec.url, &archive, spec.download_bytes, &mut progress) {
+        let _ = fs::remove_file(&archive);
+        return Err(erreur);
+    }
 
     if empreinte_sha256(&archive)? != spec.sha256 {
         // L'archive est effacee : la garder inviterait a la reutiliser plus tard

@@ -1283,19 +1283,38 @@
 /* --- Ecran de preparation -------------------------------------------------
    Le premier lancement, quand les moteurs externes doivent etre recuperes. */
 
+/* Les cartes gardent une largeur de lecture. Sans borne haute, un moteur seul
+   occupait toute la fenetre, et la barre de progression qu'il contient se
+   retrouvait etiree sur pres d'un metre d'ecran : un fil, pas une barre. */
 .setup__list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 320px));
+  justify-content: center;
   gap: var(--space-3);
   width: 100%;
 }
 
+/* Meme raison : une progression se lit d'un coup d'oeil, ce qui suppose de
+   pouvoir en embrasser les deux extremites sans balayer l'ecran. */
 .setup__global {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--space-2);
   width: 100%;
+  max-width: 320px;
   margin-top: var(--space-6);
+  text-align: center;
+}
+
+.setup__global .progress {
+  width: 100%;
+}
+
+/* La section optionnelle se detache de ce qui precede : sans cet ecart, elle
+   se lit comme la suite des moteurs requis. */
+.setup__optional-label {
+  margin-top: var(--space-8);
 }
 
 .setup__actions {
